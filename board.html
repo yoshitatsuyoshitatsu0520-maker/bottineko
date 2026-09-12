@@ -718,20 +718,117 @@ memberElement.appendChild(
                          * 投稿カード完成
                          */
 
-                        postElement.appendChild(
-                            memberElement
-                        );
+                        /*
+ * 投稿カード完成
+ */
+
+postElement.appendChild(
+    memberElement
+);
 
 
-                        postElement.appendChild(
-                            messageElement
-                        );
+postElement.appendChild(
+    messageElement
+);
 
 
-                        postList.appendChild(
-                            postElement
-                        );
+/* =====================================
+   自分の投稿なら削除ボタンを表示
+===================================== */
 
+if (
+    post.memberId &&
+    post.memberId === myMemberId
+) {
+
+    const deleteButton =
+        document.createElement(
+            "button"
+        );
+
+
+    deleteButton.className =
+        "post-delete-button";
+
+
+    deleteButton.textContent =
+        "🗑️ 削除";
+
+
+    deleteButton.type =
+        "button";
+
+
+    deleteButton.addEventListener(
+        "click",
+        async () => {
+
+            const confirmed =
+                confirm(
+                    "この投稿を削除しますか？"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            try {
+
+                deleteButton.disabled =
+                    true;
+
+                deleteButton.textContent =
+                    "削除中……";
+
+
+                await deleteDoc(
+                    doc(
+                        db,
+                        "boardPosts",
+                        postDoc.id
+                    )
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "投稿の削除に失敗しました。",
+                    error
+                );
+
+
+                alert(
+                    "投稿を削除できませんでした……"
+                );
+
+
+                deleteButton.disabled =
+                    false;
+
+                deleteButton.textContent =
+                    "🗑️ 削除";
+
+            }
+
+        }
+    );
+
+
+    postElement.appendChild(
+        deleteButton
+    );
+
+}
+
+
+postList.appendChild(
+    postElement
+);
 
                     }
                 );
@@ -836,6 +933,7 @@ memberElement.appendChild(
     postsRef,
     {
 
+        
         name:
             memberName,
 
@@ -844,6 +942,9 @@ memberElement.appendChild(
 
         number:
             memberNumber,
+
+        memberId:
+            myMemberId,
 
         message:
             message,

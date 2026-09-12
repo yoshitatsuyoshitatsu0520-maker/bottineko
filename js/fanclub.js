@@ -8,16 +8,20 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 
 import {
+
     getFirestore,
     collection,
     getDocs,
     addDoc,
+    deleteDoc,
+    doc,
     query,
     orderBy,
     onSnapshot,
     serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
+} from
+"https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 const firebaseConfig = {
     apiKey: "AIzaSyAIwaGRB6ffUB1t7emLsXqFpfYDQ5d7WjQ",
     authDomain: "teach-fanclub.firebaseapp.com",

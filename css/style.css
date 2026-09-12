@@ -2827,3 +2827,49 @@ body.horror-glitch::after {
     font-size: 12px;
     font-weight: bold;
 }
+
+/* =========================================
+   投稿削除ボタン
+========================================= */
+
+.post-delete-button {
+    margin-top: 12px;
+    padding: 6px 12px;
+
+    border: 2px solid #d9a8b8;
+    border-radius: 999px;
+
+    background: #fff5f8;
+    color: #b56b82;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.post-delete-button:hover {
+    transform: translateY(-2px);
+
+    background: #ffe8ef;
+
+    box-shadow:
+        0 4px 8px rgba(181, 107, 130, 0.15);
+}
+
+
+.post-delete-button:active {
+    transform: translateY(0);
+}
+
+
+.post-delete-button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
