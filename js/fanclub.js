@@ -30,7 +30,23 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const boardButton =
+    document.getElementById("boardButton");
 
+const homeButton =
+    document.getElementById("homeButton");
+
+    boardButton.addEventListener("click", () => {
+
+    window.location.href = "board.html";
+
+});
+
+homeButton.addEventListener("click", () => {
+
+    window.location.href = "index.html";
+
+});
 
 /* =========================================
    DOM

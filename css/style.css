@@ -1321,6 +1321,7 @@ body {
 
 .fanclub-header {
     position: relative;
+    text-align: center;
 
     display: flex;
     align-items: center;
@@ -2424,4 +2425,102 @@ body.horror-glitch::after {
     z-index: 9999;
 
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* =========================================
+   ファンクラブ ナビゲーション
+========================================= */
+
+.fanclub-navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+
+    margin-top: 40px;
+    margin-right: 20px;
+}
+
+.fanclub-navigation button {
+    width: 220px;
+    padding: 10px 15px;
+
+    border: 2px solid #a8b8dc;
+    border-radius: 20px;
+
+    background: white;
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+/* 掲示板ボタンを少し下へ */
+#boardButton {
+    margin-top: 20px;
+}
+
+/* トップページボタンをさらに少し下へ */
+#homeButton {
+    margin-top: 5px;
+}
+
+.fanclub-navigation button:hover {
+    transform: scale(1.05);
+}
+.fanclub-navigation button:hover {
+    transform: scale(1.05);
+}
+
+/* =========================================
+   ファンクラブ ヘッダー
+========================================= */
+
+.fanclub-header {
+    position: relative;
+}
+
+.fanclub-title {
+    text-align: center;
+}
+
+.fanclub-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    margin-top: 15px;
+    margin-right: 20px;
+}
+
+.fanclub-navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.fanclub-navigation button {
+    width: 220px;
+    padding: 10px 15px;
+
+    border: 2px solid #a8b8dc;
+    border-radius: 20px;
+
+    background: white;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.fanclub-navigation button:hover {
+    transform: scale(1.05);
 }
