@@ -97,7 +97,7 @@ async function loadMembers() {
             });
 
             document.getElementById("memberCount").textContent =
-    `🥝 現在の会員：${members.length}人`;
+    `現在の会員：${members.length}人`;
 
         });
 
