@@ -593,7 +593,6 @@ window.deleteMember = async function () {
 /* =========================================
    HTMLエスケープ
 ========================================= */
-
 function escapeHTML(text) {
 
     return String(text)
@@ -604,8 +603,6 @@ function escapeHTML(text) {
         .replace(/'/g, "&#039;");
 
 }
-
-
 /* =========================================
    最初にFirestoreから読み込む
 ========================================= */
