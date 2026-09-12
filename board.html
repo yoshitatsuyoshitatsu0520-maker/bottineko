@@ -144,7 +144,7 @@
                     id="post-button"
                     type="button"
                 >
-                    🐾 投稿する
+                    投稿する
                 </button>
 
 
@@ -294,16 +294,16 @@
            現在の会員情報
         ====================================== */
 
-        let memberName =
-            "ゲスト";
-
-
         let memberFavorite =
-            "未設定";
+    "未設定";
 
 
-        let isMember =
-            false;
+let memberNumber =
+    "";
+
+
+let isMember =
+    false;
 
 
 
@@ -410,13 +410,17 @@
 
 
                 memberFavorite =
-                    myMember.favorite ||
-                    "未設定";
+    myMember.favorite ||
+    "未設定";
 
 
-                isMember =
-                    true;
+memberNumber =
+    myMember.number ||
+    "";
 
+
+isMember =
+    true;
 
 
                 /*
@@ -616,10 +620,12 @@
 
 
                         nameElement.textContent =
-                            post.name ||
-                            "名無し";
-
-
+    post.number
+        ? "No." +
+          String(post.number).padStart(3, "0") +
+          "　" +
+          (post.name || "名無し")
+        : (post.name || "名無し");
 
                         const favoriteElement =
                             document.createElement(
@@ -638,17 +644,49 @@
                                 "未設定"
                             );
 
+                            const dateElement =
+    document.createElement(
+        "div"
+    );
+
+
+dateElement.className =
+    "post-date";
+
+
+if (post.createdAt) {
+
+    const date =
+        post.createdAt.toDate();
+
+    dateElement.textContent =
+        date.getFullYear() +
+        "/" +
+        String(date.getMonth() + 1).padStart(2, "0") +
+        "/" +
+        String(date.getDate()).padStart(2, "0") +
+        " " +
+        String(date.getHours()).padStart(2, "0") +
+        ":" +
+        String(date.getMinutes()).padStart(2, "0");
+
+}
+
 
 
                         memberElement.appendChild(
-                            nameElement
-                        );
+    nameElement
+);
 
 
-                        memberElement.appendChild(
-                            favoriteElement
-                        );
+memberElement.appendChild(
+    favoriteElement
+);
 
+
+memberElement.appendChild(
+    dateElement
+);
 
 
                         /*
@@ -790,23 +828,26 @@
 
 
                     await addDoc(
-                        postsRef,
-                        {
+    postsRef,
+    {
 
-                            name:
-                                memberName,
+        name:
+            memberName,
 
-                            favorite:
-                                memberFavorite,
+        favorite:
+            memberFavorite,
 
-                            message:
-                                message,
+        number:
+            memberNumber,
 
-                            createdAt:
-                                serverTimestamp()
+        message:
+            message,
 
-                        }
-                    );
+        createdAt:
+            serverTimestamp()
+
+    }
+);
 
 
 

@@ -2820,3 +2820,10 @@ body.horror-glitch::after {
     }
 
 }
+
+.post-date {
+    margin-top: 4px;
+    color: #8aa0b5;
+    font-size: 12px;
+    font-weight: bold;
+}
