@@ -2496,3 +2496,509 @@ body.horror-glitch::after {
     transform: scale(1.05);
     box-shadow: 0 4px 10px rgba(71, 126, 174, 0.15);
 }
+
+
+/* =========================================
+   💬 会員限定掲示板
+========================================= */
+
+.board-section {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+
+/* =========================================
+   📝 新しいスレッドボタン
+========================================= */
+
+
+/* =========================================
+   💬 スレッド一覧
+========================================= */
+
+.thread-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+/* =========================================
+   💬 スレッドカード
+========================================= */
+
+.thread-card {
+    display: block;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 18px 22px;
+
+    border: 2px solid #a8b8dc;
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.92);
+
+    box-shadow:
+        0 4px 10px rgba(71, 126, 174, 0.10);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.thread-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 7px 15px rgba(71, 126, 174, 0.16);
+}
+
+
+/* =========================================
+   🐱 スレッドタイトル
+========================================= */
+
+.thread-title {
+    margin: 0 0 10px;
+
+    color: #477eae;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   👤 スレッド情報
+========================================= */
+
+.thread-info {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    color: #777;
+
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.thread-info span {
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   💬 返信数
+========================================= */
+
+.thread-replies {
+    margin-left: auto;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    background: #eef6ff;
+
+    color: #477eae;
+
+    font-size: 12px;
+}
+
+
+/* =========================================
+   🐱 読み込み中
+========================================= */
+
+.board-loading {
+    padding: 35px 20px;
+
+    border: 2px dashed #a8b8dc;
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.75);
+
+    color: #777;
+
+    font-weight: bold;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   🏠 ファンクラブへ戻る
+========================================= */
+
+.board-back {
+    margin-top: 35px;
+
+    text-align: center;
+}
+
+.board-back-button {
+    display: inline-block;
+
+    padding: 10px 22px;
+
+    border: 2px solid #a8b8dc;
+    border-radius: 999px;
+
+    background: white;
+    color: #477eae;
+
+    font-weight: bold;
+    text-decoration: none;
+
+    box-shadow:
+        0 4px 0 rgba(71, 126, 174, 0.12);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.board-back-button:hover {
+    transform: scale(1.05);
+
+    box-shadow:
+        0 6px 0 rgba(71, 126, 174, 0.16);
+}
+
+
+/* =========================================
+   📱 スマホ対応
+========================================= */
+
+@media (max-width: 600px) {
+
+    .board-section {
+        width: 100%;
+    }
+
+    .board-main-button {
+        font-size: 14px;
+
+        padding: 12px 22px;
+    }
+
+    .thread-card {
+        padding: 16px;
+    }
+
+    .thread-title {
+        font-size: 16px;
+    }
+
+    .thread-info {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .thread-replies {
+        margin-left: 0;
+    }
+
+    .board-back-button {
+        font-size: 14px;
+    }
+
+}
+/* ========================================
+   掲示板
+======================================== */
+
+.board-page-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.board-page-header h1 {
+    margin: 0;
+    color: #477eae;
+    font-size: 28px;
+}
+
+.board-page-header p {
+    margin: 10px 0 0;
+    color: #31506d;
+    font-weight: bold;
+}
+
+
+/* 総合スレ */
+
+.thread-header {
+    padding: 18px 22px;
+    margin-bottom: 20px;
+
+    border: 2px solid #a8b8dc;
+    border-radius: 20px;
+
+    background: rgba(238, 248, 255, 0.9);
+}
+
+.thread-header h2 {
+    margin: 0;
+    color: #477eae;
+}
+
+.thread-header p {
+    margin: 7px 0 0;
+    font-size: 13px;
+}
+
+
+/* 投稿一覧 */
+
+#post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+/* 投稿 */
+
+.post-card {
+    padding: 18px 20px;
+
+    border: 2px solid #a8b8dc;
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.92);
+
+    box-shadow:
+        0 4px 10px rgba(71, 126, 174, 0.10);
+}
+
+
+/* 名前・推し */
+
+.post-member {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.post-name {
+    padding: 5px 12px;
+
+    border-radius: 999px;
+
+    background: #619bd0;
+    color: white;
+
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.post-favorite {
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    background: #eef6ff;
+    color: #477eae;
+
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+/* 本文 */
+
+.post-message {
+    color: #31506d;
+
+    font-size: 15px;
+    line-height: 1.8;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+
+/* 投稿フォーム */
+
+.post-form {
+    margin-top: 25px;
+    padding: 20px;
+
+    border: 2px dashed #a8b8dc;
+    border-radius: 20px;
+
+    background: rgba(238, 248, 255, 0.7);
+}
+
+.post-form h3 {
+    margin: 0 0 15px;
+    color: #477eae;
+}
+
+
+/* 現在の会員情報 */
+
+.member-info-box {
+    display: flex;
+    gap: 10px;
+
+    margin-bottom: 15px;
+
+    flex-wrap: wrap;
+}
+
+.member-info-box span {
+    padding: 7px 12px;
+
+    border-radius: 999px;
+
+    background: white;
+
+    border: 1px solid #c7d9eb;
+
+    font-size: 13px;
+}
+
+
+/* 投稿入力 */
+
+#post-message {
+    width: 100%;
+    min-height: 120px;
+
+    padding: 14px;
+
+    border: 2px solid #a8b8dc;
+    border-radius: 15px;
+
+    background: white;
+
+    color: #31506d;
+
+    font-family: inherit;
+    font-size: 15px;
+
+    resize: vertical;
+}
+
+#post-message:focus {
+    outline: none;
+
+    border-color: #619bd0;
+
+    box-shadow:
+        0 0 0 3px rgba(97, 155, 208, 0.15);
+}
+
+
+/* 投稿ボタン */
+
+#post-button {
+    display: block;
+
+    margin: 15px auto 0;
+
+    padding: 10px 24px;
+
+    border: 3px solid white;
+    border-radius: 999px;
+
+    background: #619bd0;
+    color: white;
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 0 #477eae;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+#post-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 7px 0 #477eae;
+}
+
+#post-button:active {
+    transform: translateY(3px);
+
+    box-shadow:
+        0 2px 0 #477eae;
+}
+
+
+/* 読み込み中 */
+
+.board-loading {
+    padding: 30px 20px;
+
+    border: 2px dashed #a8b8dc;
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.75);
+
+    color: #777;
+
+    text-align: center;
+    font-weight: bold;
+}
+
+
+/* 戻るボタン */
+
+.board-back {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.board-back-button {
+    display: inline-block;
+
+    padding: 10px 22px;
+
+    border: 2px solid #a8b8dc;
+    border-radius: 999px;
+
+    background: white;
+    color: #477eae;
+
+    font-weight: bold;
+    text-decoration: none;
+
+    box-shadow:
+        0 4px 0 rgba(71, 126, 174, 0.12);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.board-back-button:hover {
+    transform: scale(1.05);
+
+    box-shadow:
+        0 6px 0 rgba(71, 126, 174, 0.16);
+}

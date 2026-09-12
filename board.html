@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>総合掲示板｜ねこのティーチくんファンサイト</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- 背景 -->
+    <div class="background"></div>
+
+    <main class="container">
+
+        
+
+        <!-- 総合スレ -->
+        <section class="board-section">
+
+            <div class="thread-header">
+
+                <div>
+                    <h2>ねこティチファンクラブ総合スレ</h2>
+
+                    <p>
+                        ねこのティーチくんについて語ろうぜ！
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- 投稿一覧 -->
+            <div id="post-list">
+
+                <div class="board-loading">
+                    投稿を読み込んでいます……🐱
+                </div>
+
+            </div>
+
+
+            <!-- 投稿フォーム -->
+            <div class="post-form">
+
+                <h3>✏️ 投稿する</h3>
+
+                <!-- 現在の会員情報 -->
+                <div class="member-info-box">
+
+                    <div>
+                        <span class="info-label">名前</span>
+                        <strong id="member-name">読み込み中...</strong>
+                    </div>
+
+                    <div>
+                        <span class="info-label">推しキャラ</span>
+                        <strong id="member-favorite">読み込み中...</strong>
+                    </div>
+
+                </div>
+
+
+                <textarea
+                    id="post-message"
+                    placeholder="ここにメッセージを書いてね！"
+                    maxlength="1000"
+                ></textarea>
+
+
+                <button id="post-button">
+                    投稿する
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- 戻る -->
+        <div class="board-back">
+
+            <a
+                href="index.html"
+                class="board-back-button"
+            >
+                ← ファンサイトへ戻る
+            </a>
+
+        </div>
+
+    </main>
+
+
+    <!-- Firebase -->
+    <script type="module">
+
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+        import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    query,
+    orderBy,
+    onSnapshot,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+
+        // =========================
+        // Firebase設定
+        // =========================
+
+        const firebaseConfig = {
+
+            // ↓ここは今使っているFirebaseの設定を入れる
+
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.firebasestorage.app",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+
+        };
+
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+
+        // =========================
+        // 仮の会員情報
+        // =========================
+
+        const myMemberId =
+    localStorage.getItem("teachFanclubMyMemberId");
+
+
+let memberName = "ゲスト";
+let memberFavorite = "未設定";
+
+        document.getElementById("member-name").textContent =
+            memberName;
+
+        document.getElementById("member-favorite").textContent =
+            memberFavorite;
+
+
+        // =========================
+        // 投稿を表示
+        // =========================
+
+        const postList =
+            document.getElementById("post-list");
+
+        const postsRef =
+            collection(db, "boardPosts");
+
+        const postsQuery =
+            query(
+                postsRef,
+                orderBy("createdAt", "asc")
+            );
+
+
+        onSnapshot(postsQuery, (snapshot) => {
+
+            postList.innerHTML = "";
+
+
+            if (snapshot.empty) {
+
+                postList.innerHTML = `
+                    <div class="board-loading">
+                        まだ投稿がありません！<br>
+                        最初の投稿をしてみよう🐱✨
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            snapshot.forEach((doc) => {
+
+                const post = doc.data();
+
+
+                const postElement =
+                    document.createElement("article");
+
+                postElement.className = "post-card";
+
+
+                postElement.innerHTML = `
+
+                    <div class="post-member">
+
+                        <div class="post-name">
+                            ${escapeHTML(post.name)}
+                        </div>
+
+                        <div class="post-favorite">
+                            推し：${escapeHTML(post.favorite)}
+                        </div>
+
+                    </div>
+
+
+                    <div class="post-message">
+                        ${escapeHTML(post.message)}
+                    </div>
+
+                `;
+
+
+                postList.appendChild(postElement);
+
+            });
+
+        });
+
+
+        // =========================
+        // 投稿
+        // =========================
+
+        document
+            .getElementById("post-button")
+            .addEventListener("click", async () => {
+
+                const textarea =
+                    document.getElementById("post-message");
+
+                const message =
+                    textarea.value.trim();
+
+
+                if (!message) {
+
+                    alert("メッセージを入力してね！🐱");
+
+                    return;
+                }
+
+
+                try {
+
+                    await addDoc(postsRef, {
+
+                        name: memberName,
+
+                        favorite: memberFavorite,
+
+                        message: message,
+
+                        createdAt: serverTimestamp()
+
+                    });
+
+
+                    textarea.value = "";
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "投稿できませんでした……😭"
+                    );
+
+                }
+
+            });
+
+
+        // =========================
+        // HTMLエスケープ
+        // =========================
+
+        function escapeHTML(text) {
+
+            const div =
+                document.createElement("div");
+
+            div.textContent = text;
+
+            return div.innerHTML;
+
+        }
+
+    </script>
+
+</body>
+</html>
+

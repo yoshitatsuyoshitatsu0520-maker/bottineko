@@ -596,5 +596,80 @@ function escapeHTML(text) {
 /* =========================================
    最初にFirestoreから読み込む
 ========================================= */
+async function loadMyMember() {
 
+    if (!myMemberId) {
+
+        document.getElementById("member-name").textContent =
+            "ゲスト";
+
+        document.getElementById("member-favorite").textContent =
+            "未設定";
+
+        return;
+
+    }
+
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(db, "members")
+            );
+
+
+        let myMember = null;
+
+
+        snapshot.forEach(memberDoc => {
+
+            if (memberDoc.id === myMemberId) {
+
+                myMember = {
+                    id: memberDoc.id,
+                    ...memberDoc.data()
+                };
+
+            }
+
+        });
+
+
+        if (!myMember) {
+
+            console.warn(
+                "自分の会員情報が見つかりませんでした。"
+            );
+
+            return;
+
+        }
+
+
+        memberName =
+            myMember.name || "ゲスト";
+
+        memberFavorite =
+            myMember.favorite || "未設定";
+
+
+        document.getElementById("member-name").textContent =
+            memberName;
+
+        document.getElementById("member-favorite").textContent =
+            memberFavorite;
+
+
+    } catch (error) {
+
+        console.error(
+            "会員情報の取得に失敗しました。",
+            error
+        );
+
+    }
+
+}
 loadMembers();
+
