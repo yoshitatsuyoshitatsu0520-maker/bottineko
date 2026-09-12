@@ -119,7 +119,7 @@ async function loadMembers() {
             document.getElementById("memberCount");
 
         memberCount.textContent =
-            `🥝 現在の会員：${members.length}人`;
+            `現在の会員：${members.length}人`;
 
 
         displayMembers();
@@ -532,7 +532,7 @@ window.deleteMember = async function () {
                     member.id !== myMemberId
             );
 document.getElementById("memberCount").textContent =
-    `🥝 現在の会員：${members.length}人`;
+    `現在の会員：${members.length}人`;
 
         localStorage.removeItem(
             "teachFanclubMyMemberId"
