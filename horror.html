@@ -1,0 +1,655 @@
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>繝懊け縺ｮ縺薙→縲∬ｦ九▽縺代■繧?▲縺溘ｓ縺??縲?</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  color: #eee;
+  font-family: serif;
+}
+
+body {
+  position: relative;
+}
+
+/* 全体の暗闇 */
+#screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at center, #151515 0%, #050505 45%, #000 100%);
+  transition: filter 0.2s;
+}
+
+/* ノイズ */
+#screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.15;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.08) 0px,
+      rgba(255,255,255,0.08) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  z-index: 20;
+}
+
+/* 赤フラッシュ */
+.red-flash {
+  position: fixed;
+  inset: 0;
+  background: #f00;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.red-flash.active {
+  animation: redFlash 0.18s ease-out;
+}
+
+.red-flash.strong {
+  animation: strongRedFlash 0.35s ease-out;
+}
+
+@keyframes redFlash {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.65;
+  }
+  45% {
+    opacity: 0.15;
+  }
+  65% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes strongRedFlash {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  35% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.75;
+  }
+  70% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* 中央コンテンツ */
+.content {
+  position: relative;
+  z-index: 10;
+  width: min(90%, 700px);
+  text-align: center;
+}
+
+.message {
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(20px, 4vw, 34px);
+  line-height: 1.8;
+  letter-spacing: 0.12em;
+  text-shadow:
+    0 0 5px #fff,
+    0 0 15px #666;
+  white-space: pre-wrap;
+}
+
+.counter {
+  margin-top: 20px;
+  font-family: monospace;
+  font-size: 14px;
+  color: #666;
+}
+
+/* ボタン */
+.next {
+  margin-top: 35px;
+  padding: 12px 35px;
+  border: 1px solid #555;
+  background: rgba(0,0,0,0.8);
+  color: #aaa;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.next:hover {
+  color: #fff;
+  border-color: #fff;
+  box-shadow: 0 0 15px #fff;
+}
+
+/* グリッチ */
+.glitch {
+  animation: glitch 0.12s infinite;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-3px, 2px);
+  }
+  40% {
+    transform: translate(3px, -2px);
+  }
+  60% {
+    transform: translate(-2px, -1px);
+  }
+  80% {
+    transform: translate(2px, 1px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+/* 影 */
+.shadow {
+  position: fixed;
+  width: 120px;
+  height: 300px;
+  background: #000;
+  filter: blur(15px);
+  opacity: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.shadow.show {
+  animation: shadowAppear 2s forwards;
+}
+
+@keyframes shadowAppear {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* 目 */
+.eye {
+  position: fixed;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #eee;
+  box-shadow:
+    0 0 10px #fff,
+    0 0 25px #fff;
+  opacity: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.eye.show {
+  animation: eyeAppear 1.5s forwards;
+}
+
+@keyframes eyeAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* 最終画面 */
+.break-screen {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  color: #f00;
+  text-align: center;
+}
+
+.break-screen::before {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(255,0,0,0.08) 3px,
+      transparent 4px
+    );
+  pointer-events: none;
+}
+
+.break-text {
+  position: relative;
+  z-index: 2;
+  font-size: clamp(25px, 6vw, 65px);
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  text-shadow:
+    0 0 5px #f00,
+    0 0 20px #f00,
+    0 0 50px #900;
+}
+
+/* 超激しい画面揺れ */
+.break-screen.active {
+  display: flex;
+  animation:
+    violentShake 0.08s infinite,
+    finalPulse 0.4s infinite alternate;
+}
+
+@keyframes violentShake {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  10% {
+    transform: translate(-8px, 5px) rotate(-0.8deg);
+  }
+  20% {
+    transform: translate(10px, -7px) rotate(0.9deg);
+  }
+  30% {
+    transform: translate(-12px, -4px) rotate(-1deg);
+  }
+  40% {
+    transform: translate(9px, 8px) rotate(0.8deg);
+  }
+  50% {
+    transform: translate(-10px, -9px) rotate(-0.7deg);
+  }
+  60% {
+    transform: translate(12px, 3px) rotate(1deg);
+  }
+  70% {
+    transform: translate(-7px, 9px) rotate(-0.8deg);
+  }
+  80% {
+    transform: translate(11px, -6px) rotate(0.7deg);
+  }
+  90% {
+    transform: translate(-12px, 5px) rotate(-1deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@keyframes finalPulse {
+  from {
+    filter: brightness(0.7) contrast(1.2);
+  }
+  to {
+    filter: brightness(1.8) contrast(1.8);
+  }
+}
+
+/* 戻るボタン */
+.back {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 25px;
+  border: 1px solid #400;
+  color: #700;
+  background: #000;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.back:hover {
+  color: #f00;
+  border-color: #f00;
+}
+</style>
+</head>
+
+<body>
+
+<div id="screen">
+
+  <div class="content">
+
+    <div id="message" class="message"></div>
+
+    <div id="counter" class="counter">
+      0
+    </div>
+
+    <button id="next" class="next">
+      次へ
+    </button>
+
+  </div>
+
+</div>
+
+<div id="redFlash" class="red-flash"></div>
+
+<div id="shadow" class="shadow"></div>
+
+<div id="eye" class="eye"></div>
+
+<div id="breakScreen" class="break-screen">
+
+  <div class="break-text">
+    險ｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺?
+險ｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺?
+險ｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺?
+險ｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺?
+險ｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺?
+險ｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺?
+險ｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺?
+險ｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺呵ｨｱ縺輔↑縺?ｮｺ縺?
+
+  </div>
+
+ 
+</div>
+
+<script>
+
+const messages = [
+
+    "なぜ押した",
+
+    "なぜ押した",
+
+    "なぜ押した",
+
+    "なぜ押した",
+
+
+    "なぜ押した",
+
+    "許さない",
+
+    "お前はここに存在してはいけない",
+
+    "呪う",
+
+    "呪う",
+
+    "呪う",
+    "呪う",
+
+    "呪う",
+
+    "お前に呪いをかける",
+
+    "",
+
+    "縺薙％縺ｫ谿九ｋ縺ｪ",
+
+    "繝懊け縺ｮ縺薙→縲∬ｦ九▽縺代■繧?▲縺溘ｓ縺??縲?",
+
+    "縺雁燕繧呈ｮｺ縺?",
+
+    "そういえば",
+
+    "お肉って、",
+
+    "おいしいよね"
+
+];
+
+
+let clickCount = 0;
+
+const message = document.getElementById("message");
+const counter = document.getElementById("counter");
+const next = document.getElementById("next");
+const redFlash = document.getElementById("redFlash");
+const shadow = document.getElementById("shadow");
+const eye = document.getElementById("eye");
+const breakScreen = document.getElementById("breakScreen");
+
+
+/* 赤フラッシュ */
+
+function flashRed(strong = false) {
+
+  redFlash.classList.remove("active");
+  redFlash.classList.remove("strong");
+
+  void redFlash.offsetWidth;
+
+  if (strong) {
+    redFlash.classList.add("strong");
+  } else {
+    redFlash.classList.add("active");
+  }
+
+}
+
+
+/* ランダム赤フラッシュ */
+
+function randomRedFlash() {
+
+  let chance = 0.08;
+
+  if (clickCount >= 4) {
+    chance = 0.16;
+  }
+
+  if (clickCount >= 10) {
+    chance = 0.25;
+  }
+
+  if (clickCount >= 15) {
+    chance = 0.4;
+  }
+
+  if (Math.random() < chance) {
+    flashRed(clickCount >= 15);
+  }
+
+}
+
+
+/* 影 */
+
+function showShadow() {
+
+  shadow.style.left =
+    Math.random() * 90 + "%";
+
+  shadow.style.top =
+    Math.random() * 60 + "%";
+
+  shadow.classList.remove("show");
+
+  void shadow.offsetWidth;
+
+  shadow.classList.add("show");
+
+}
+
+
+/* 目 */
+
+function showEye() {
+
+  eye.style.left =
+    Math.random() * 90 + "%";
+
+  eye.style.top =
+    Math.random() * 80 + "%";
+
+  eye.classList.remove("show");
+
+  void eye.offsetWidth;
+
+  eye.classList.add("show");
+
+}
+
+
+/* メッセージ表示 */
+
+function showMessage() {
+
+  const index =
+    Math.min(clickCount - 1, messages.length - 1);
+
+  message.textContent = messages[index];
+
+  counter.textContent =
+    "" + clickCount;
+
+}
+
+
+/* 次へ */
+
+next.addEventListener("click", () => {
+
+  clickCount++;
+
+  showMessage();
+
+  randomRedFlash();
+
+
+  /* ある程度進んだら不穏な演出 */
+
+  if (clickCount >= 3 && Math.random() < 0.4) {
+    showShadow();
+  }
+
+  if (clickCount >= 5 && Math.random() < 0.5) {
+    showEye();
+  }
+
+
+  /* グリッチ */
+
+  if (clickCount >= 7) {
+
+    message.classList.add("glitch");
+
+    setTimeout(() => {
+      message.classList.remove("glitch");
+    }, 500);
+
+  }
+
+
+  /* 最終画面 */
+
+  if (clickCount >= messages.length) {
+
+    setTimeout(() => {
+
+      breakScreen.classList.add("active");
+
+      /* 最初の強烈なフラッシュ */
+      flashRed(true);
+
+      /* 最終画面では定期的に赤フラッシュ */
+      setInterval(() => {
+
+        flashRed(true);
+
+      }, 1500 + Math.random() * 2000);
+
+    }, 1000);
+
+  }
+
+});
+
+
+/* 放置しても少しずつ不穏になる */
+
+let idleTimer;
+
+function resetIdle() {
+
+  clearTimeout(idleTimer);
+
+  idleTimer = setTimeout(() => {
+
+    if (clickCount >= 8 && clickCount < messages.length) {
+
+      flashRed(false);
+      showShadow();
+
+    }
+
+  }, 7000);
+
+}
+
+next.addEventListener("click", resetIdle);
+
+resetIdle();
+
+</script>
+
+</body>
+</html>

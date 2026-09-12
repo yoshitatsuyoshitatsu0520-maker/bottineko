@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ファンクラブ｜ぼっちねこくんのふもふも広場</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<main class="container character-page">
+
+    <!-- =========================
+         タイトル
+    ========================== -->
+
+    <header class="page-header">
+
+        <div class="fanclub-header">
+
+            <div>
+                <h1>ティーチくんファンクラブ</h1>
+
+                <p>
+                    非公式のファンクラブだよ<br>参加してくれると嬉しいな
+                </p>
+            </div>
+
+            <button
+                id="joinButton"
+                class="join-button"
+                type="button"
+            >
+                参加する
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         会員証一覧
+    ========================== -->
+
+    <section class="fanclub-section">
+
+        <h2>🎫 みんなのなんちゃって会員証</h2>
+
+        <div
+            id="memberList"
+            class="member-list"
+        ></div>
+
+    </section>
+
+
+    <!-- =========================
+         参加フォーム
+    ========================== -->
+
+    <div
+        id="joinModal"
+        class="join-modal"
+    >
+
+        <div class="join-box">
+
+            <button
+                id="closeJoinButton"
+                class="close-button"
+                type="button"
+            >
+                ×
+            </button>
+
+            <h2>ファンクラブ参加</h2>
+
+            <p>
+                会員証を作って参加しよう！
+            </p>
+
+
+            <label>
+                ニックネーム
+
+                <input
+                    id="memberName"
+                    type="text"
+                    maxlength="20"
+                    placeholder="ニックネーム"
+                >
+            </label>
+
+
+            <label>
+                推しキャラクター
+
+                <select id="favoriteCharacter">
+
+                    <option value="ティーチ">ティーチ</option>
+                    <option value="サム">サム</option>
+                    <option value="コバヤシ">コバヤシ</option>
+                    <option value="だだ">だだ</option>
+                    <option value="ブライアン">ブライアン</option>
+                    <option value="大西">大西</option>
+                    <option value="スズノ">スズノ</option>
+                    <option value="終">終</option>
+                    <option value="フアン">フアン</option>
+                    <option value="デリート">デリート</option>
+                    <option value="レア">レア</option>
+                    <option value="ボツ">ボツ</option>
+                    <option value="オリ">オリ</option>
+                    <option value="スミス">スミス</option>
+                    <option value="ひみつの親友">ひみつの親友</option>
+                    <option value="箱推し">箱推し</option>
+                    <option value="その他">その他</option>
+
+                </select>
+
+            </label>
+
+
+            <label>
+                ひとこと
+
+                <textarea
+                    id="memberMessage"
+                    maxlength="50"
+                    placeholder="よろしくお願いします！"
+                ></textarea>
+
+            </label>
+
+
+            <button
+                id="createMemberButton"
+                class="create-member-button"
+                type="button"
+            >
+                🎫 会員証を作る！
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         戻る
+    ========================== -->
+
+    <a
+        href="index.html"
+        class="back-button"
+    >
+        🏠 トップページへ戻る
+    </a>
+
+</main>
+
+
+<!-- =========================
+     BGM
+========================== -->
+
+<div class="bgm-control">
+
+    <button id="bgmButton" type="button">
+        🎵 BGM ON
+    </button>
+
+    <audio id="bgm" loop>
+        <source src="audio/bgm.mp3" type="audio/mpeg">
+    </audio>
+
+</div>
+
+
+<!-- キウイ -->
+
+<img
+    id="cursorKiwi"
+    src="images/kiwi.png"
+    alt=""
+>
+
+
+<script src="js/teach.js"></script>
+
+<script type="module" src="js/fanclub.js"></script>
+
+</body>
+</html>

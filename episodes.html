@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>エピソード一覧｜ぼっちねこくんのふもふも広場</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<main class="container character-page">
+
+    <!-- =========================
+         ページタイトル
+    ========================== -->
+
+    <header class="page-header">
+
+        <h1>エピソード一覧</h1>
+
+        <p>
+            ボクたちのおはなしだよ<br>
+            どのシリーズがすきかな？
+        </p>
+
+    </header>
+
+
+    <!-- =========================
+         シリーズ一覧
+    ========================== -->
+
+    <section class="characters-section">
+
+        <div class="episode-list">
+
+
+            <!-- ねこのティーチくん 1期 -->
+
+            <a
+                href="https://youtube.com/playlist?list=PL53EcsT_0J1yFG4XY0k_cZzAO-qG5XnTH&si=4D75NbX1BA39SVbm"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="episode-card"
+            >
+
+                    <img
+        src="images/episodes/1.png"
+        alt="ねこのティーチくん 1期"
+        class="episode-thumbnail"
+    >
+                <h3>
+                    ねこのティーチくん 1期
+                </h3>
+
+                <p>
+                    やあ、ボクはティーチくんだよ
+                </p>
+
+                <span>
+                    ▶ シリーズを見る
+                </span>
+
+            </a>
+
+
+            <!-- ねこのティーチくん 2期 -->
+
+            <a
+                href="https://youtube.com/playlist?list=PL53EcsT_0J1z75KNVpRBxupFfsNdxL6Jz&si=8w92L-mcDTuMtStU"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="episode-card"
+            >
+
+                    <img
+        src="images/episodes/2.png"
+        alt="ねこのティーチくん ２期"
+        class="episode-thumbnail"
+    >
+
+                <h3>
+                    ねこのティーチくん 2期
+                </h3>
+
+                <p>
+                    今日もげんきだ！ティーチくん
+                </p>
+
+                <span>
+                    ▶ シリーズを見る
+                </span>
+
+            </a>
+
+
+            <!-- 番外編 -->
+
+            <a
+                href="https://youtube.com/playlist?list=PL53EcsT_0J1zKOKY2z-v67I8CmUkWbPMp&si=cA0IT_8X_0bRcY-n"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="episode-card"
+            >
+
+                    <img
+        src="images/episodes/3.png"
+        alt="ねこのティーチくん 1期"
+        class="episode-thumbnail"
+    >
+
+                <h3>
+                    0000のティーチくん
+                </h3>
+
+                <p>
+                    ？？？
+                </p>
+
+                <span>
+                    ▶ シリーズを見る
+                </span>
+
+            </a>
+
+
+            <!-- その他 -->
+
+            <a
+                href="https://youtube.com/playlist?list=PL53EcsT_0J1zJOqlbbMyOfiLEJQDx-w2g&si=a916sTqFr2-jKAR1"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="episode-card"
+            >
+
+                    <img
+        src="images/episodes/4.png"
+        alt="ねこのティーチくん 1期"
+        class="episode-thumbnail"
+    >
+
+                <h3>
+                    ティーチくんとまなぼう
+                </h3>
+
+                <p>
+                    シュールギャグな番外編だよ
+                </p>
+
+                <span>
+                    ▶ シリーズを見る
+                </span>
+
+            </a>
+
+            <a
+                href="https://youtube.com/playlist?list=PL53EcsT_0J1z-INYZ6rdVkcVoCqisxYN2&si=bk-jZSW3R7qNtJee"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="episode-card"
+            >
+
+                    <img
+        src="images/episodes/5.png"
+        alt="ねこのティーチくん 1期"
+        class="episode-thumbnail"
+    >
+
+                <h3>
+                    ティーチくん ASMR
+                </h3>
+
+                <p>
+                    ティーチくんのささやきASMR
+                </p>
+
+                <span>
+                    ▶ シリーズを見る
+                </span>
+
+            </a>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         戻るボタン
+    ========================== -->
+
+    <a href="index.html" class="back-button">
+        🏠 トップページへ戻る
+    </a>
+
+</main>
+
+
+<!-- =========================
+     BGM
+========================== -->
+
+<div class="bgm-control">
+
+    <button id="bgmButton" type="button">
+        🎵 BGM ON
+    </button>
+
+    <audio id="bgm" loop>
+        <source src="audio/bgm.mp3" type="audio/mpeg">
+    </audio>
+
+</div>
+
+
+<!-- キウイ -->
+
+<img
+    id="cursorKiwi"
+    src="images/kiwi.png"
+    alt=""
+>
+
+
+<script src="js/teach.js"></script>
+
+</body>
+</html>
