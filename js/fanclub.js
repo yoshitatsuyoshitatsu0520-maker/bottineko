@@ -117,11 +117,7 @@ async function loadMembers() {
             error
         );
 
-        memberList.innerHTML = `
-            <p class="no-members">
-                会員データを読み込めませんでした……！
-            </p>
-        `;
+        
 
     }
 
@@ -593,19 +589,14 @@ window.deleteMember = async function () {
 /* =========================================
    HTMLエスケープ
 ========================================= */
-/* =========================================
-   HTMLエスケープ
-========================================= */
 
 function escapeHTML(text) {
-
     return String(text)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
-
 }
 
 
