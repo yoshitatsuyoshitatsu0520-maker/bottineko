@@ -408,57 +408,20 @@ function displayMembers() {
 
         const isMine = member.id === myMemberId;
 
-        card.innerHTML = `
-            <div class="member-card-header">
-                🥝 TEACH FAN CLUB
-            </div>
-
-            <div class="member-number">
-                No.${String(member.number).padStart(4, "0")}
-            </div>
-
-            <div class="member-name">
-                ${escapeHTML(member.name)}
-            </div>
-
-            <div class="member-info">
-                ♡ 推し：
-                ${escapeHTML(member.favorite)}
-            </div>
-
-            <div class="member-message">
-                「${escapeHTML(member.message)}」
-            </div>
-
-            ${
-                isMine
-                    ? `
-                        <div class="member-actions">
-                            <button
-                                class="edit-member-button"
-                                onclick="editMember()"
-                            >
-                                編集
-                            </button>
-
-                            <button
-                                class="delete-member-button"
-                                onclick="deleteMember()"
-                            >
-                                削除
-                            </button>
-                        </div>
-                    `
-                    : ""
-            }
-        `;
-
-        memberList.appendChild(card);
-    });
-
-    if (members.length === 0) {
-
-        memberList.innerHTML = `
+        card.innerHTML =
+    '<div class="member-card-header">🥝 TEACH FAN CLUB</div>' +
+    '<div class="member-number">No.' +
+    String(member.number).padStart(4, "0") +
+    '</div>' +
+    '<div class="member-name">' +
+    escapeHTML(member.name) +
+    '</div>' +
+    '<div class="member-info">♡ 推し：' +
+    escapeHTML(member.favorite) +
+    '</div>' +
+    '<div class="member-message">「' +
+    escapeHTML(member.message) +
+    '」</div>';
             <p class="no-members">
                 まだ会員はいないみたい……！<br>
                 最初の会員になってみよう🐱💙
