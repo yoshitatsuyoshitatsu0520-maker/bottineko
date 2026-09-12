@@ -264,7 +264,7 @@ createMemberButton.addEventListener(
 
 
                     alert(
-                        "会員証を更新したよ！🎫"
+                        "会員証を更新したよ！"
                     );
 
 
@@ -493,7 +493,7 @@ window.deleteMember = async function () {
 
     const answer =
         confirm(
-            "本当に会員証を削除する？"
+            "本当にファンクラブを退会する？"
         );
 
 
@@ -534,7 +534,7 @@ window.deleteMember = async function () {
 
 
         alert(
-            "会員証を削除したよ。"
+            "会員証を削除したよ"
         );
 
 
