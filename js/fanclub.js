@@ -74,6 +74,9 @@ let myMemberId =
 /* =========================================
    Firestoreから会員を読み込む
 ========================================= */
+/* =========================================
+   Firestoreから会員を読み込む
+========================================= */
 
 async function loadMembers() {
 
@@ -84,16 +87,17 @@ async function loadMembers() {
                 collection(db, "members")
             );
 
-
         members = [];
 
-
-        snapshot.forEach(document => {
+        snapshot.forEach(memberDoc => {
 
             members.push({
-                id: document.id,
-                ...document.data()
+                id: memberDoc.id,
+                ...memberDoc.data()
             });
+
+            document.getElementById("memberCount").textContent =
+    `🥝 現在の会員：${members.length}人`;
 
         });
 
@@ -107,6 +111,17 @@ async function loadMembers() {
         );
 
 
+        /*
+         * 会員数を表示
+         */
+
+        const memberCount =
+            document.getElementById("memberCount");
+
+        memberCount.textContent =
+            `🥝 現在の会員：${members.length}人`;
+
+
         displayMembers();
 
 
@@ -117,13 +132,9 @@ async function loadMembers() {
             error
         );
 
-        
-
     }
 
 }
-
-
 /* =========================================
    参加ボタン
 ========================================= */
@@ -520,7 +531,8 @@ window.deleteMember = async function () {
                 member =>
                     member.id !== myMemberId
             );
-
+document.getElementById("memberCount").textContent =
+    `🥝 現在の会員：${members.length}人`;
 
         localStorage.removeItem(
             "teachFanclubMyMemberId"

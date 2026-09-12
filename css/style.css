@@ -2406,3 +2406,22 @@ body.horror-glitch::after {
     }
 
 }
+
+#memberCount {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+
+    padding: 8px 14px;
+
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #a8b8dc;
+    border-radius: 20px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    z-index: 9999;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
