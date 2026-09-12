@@ -571,7 +571,7 @@ document.getElementById("memberCount").textContent =
         console.error(error);
 
         alert(
-            "削除に失敗しました……！"
+            "削除に失敗しました…"
         );
 
     }
