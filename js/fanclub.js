@@ -396,28 +396,19 @@ createMemberButton.addEventListener(
 /* =========================================
    会員証表示
 ========================================= */
-
 function displayMembers() {
 
     memberList.innerHTML = "";
 
-
     members.forEach(member => {
 
-        const card =
-            document.createElement("div");
+        const card = document.createElement("div");
 
+        card.className = "member-card";
 
-        card.className =
-            "member-card";
-
-
-        const isMine =
-            member.id === myMemberId;
-
+        const isMine = member.id === myMemberId;
 
         card.innerHTML = `
-
             <div class="member-card-header">
                 🥝 TEACH FAN CLUB
             </div>
@@ -441,35 +432,29 @@ function displayMembers() {
 
             ${
                 isMine
-                ? `
-                    <div class="member-actions">
+                    ? `
+                        <div class="member-actions">
+                            <button
+                                class="edit-member-button"
+                                onclick="editMember()"
+                            >
+                                編集
+                            </button>
 
-                        <button
-                            class="edit-member-button"
-                            onclick="editMember()"
-                        >
-                            編集
-                        </button>
-
-                        <button
-                            class="delete-member-button"
-                            onclick="deleteMember()"
-                        >
-                            削除
-                        </button>
-
-                    </div>
-                `
-                : ""
+                            <button
+                                class="delete-member-button"
+                                onclick="deleteMember()"
+                            >
+                                削除
+                            </button>
+                        </div>
+                    `
+                    : ""
             }
-
         `;
 
-
         memberList.appendChild(card);
-
     });
-
 
     if (members.length === 0) {
 
@@ -481,9 +466,7 @@ function displayMembers() {
         `;
 
     }
-
 }
-
 
 /* =========================================
    編集
