@@ -114,7 +114,6 @@
 
         </div>
 
-
         <div class="mode-buttons">
 
             <button
@@ -169,7 +168,7 @@
                 id="manual-name"
                 type="text"
                 maxlength="30"
-                placeholder="名前を入力してね"
+                placeholder="名前を入力"
             >
 
 
@@ -178,23 +177,78 @@
             </label>
 
             <select id="manual-favorite">
- <option value="ティーチ">ティーチ</option>
-                    <option value="サム">サム</option>
-                    <option value="コバヤシ">コバヤシ</option>
-                    <option value="だだ">だだ</option>
-                    <option value="ブライアン">ブライアン</option>
-                    <option value="大西">大西</option>
-                    <option value="スズノ">スズノ</option>
-                    <option value="終">終</option>
-                    <option value="フアン">フアン</option>
-                    <option value="デリート">デリート</option>
-                    <option value="レア">レア</option>
-                    <option value="ボツ">ボツ</option>
-                    <option value="オリ">オリ</option>
-                    <option value="スミス">スミス</option>
-                    <option value="ひみつの親友">ひみつの親友</option>
-                    <option value="箱推し">箱推し</option>
-                    <option value="その他">その他</option>
+
+                <option value="">
+                    推しを選ぶ
+                </option>
+
+                <option value="ティーチ">
+                    ティーチ
+                </option>
+
+                <option value="サム">
+                    サム
+                </option>
+
+                <option value="コバヤシ">
+                    コバヤシ
+                </option>
+
+                <option value="だだ">
+                    だだ
+                </option>
+
+                <option value="ブライアン">
+                    ブライアン
+                </option>
+
+                <option value="大西">
+                    大西
+                </option>
+
+                <option value="スズノ">
+                    スズノ
+                </option>
+
+                <option value="終">
+                    終
+                </option>
+
+                <option value="フアン">
+                    フアン
+                </option>
+
+                <option value="デリート">
+                    デリート
+                </option>
+
+                <option value="レア">
+                    レア
+                </option>
+
+                <option value="ボツ">
+                    ボツ
+                </option>
+
+                <option value="オリ">
+                    オリ
+                </option>
+
+                <option value="スミス">
+                    スミス
+                </option>
+
+                <option value="ひみつの親友">
+                    ひみつの親友
+                </option>
+
+                <option value="箱推し">
+                    箱推し
+                </option>
+
+                <option value="その他">
+                    その他
+                </option>
 
             </select>
 
@@ -305,7 +359,7 @@
             <textarea
                 id="post-message"
                 maxlength="1000"
-                placeholder="メッセージを書いてね！"
+                placeholder="メッセージを書く"
             ></textarea>
 
 
@@ -407,7 +461,6 @@ const memberModeButton =
 const guestModeButton =
     document.getElementById("guest-mode-button");
 
-
 const memberNameSelect =
     document.getElementById("member-name-select");
 
@@ -416,7 +469,6 @@ const registeredNameButton =
 
 const memberGuestButton =
     document.getElementById("member-guest-button");
-
 
 const manualMemberMode =
     document.getElementById("manual-member-mode");
@@ -439,7 +491,6 @@ const manualStartButton =
 const manualGuestButton =
     document.getElementById("manual-guest-button");
 
-
 const boardContent =
     document.getElementById("board-content");
 
@@ -452,13 +503,11 @@ const postMessage =
 const postButton =
     document.getElementById("post-button");
 
-
 const memberNameElement =
     document.getElementById("member-name");
 
 const memberFavoriteElement =
     document.getElementById("member-favorite");
-
 
 const foundMemberName =
     document.getElementById("found-member-name");
@@ -519,9 +568,31 @@ let isMember = false;
 
 
 /* =========================================
-   掲示板表示
+   初回スクロール判定
 ========================================= */
 
+let hasInitialScroll = false;
+
+
+/* =========================================
+   掲示板を最新位置へ移動
+========================================= */
+
+function scrollToLatest() {
+
+    requestAnimationFrame(() => {
+
+        postList.scrollTop =
+            postList.scrollHeight;
+
+    });
+
+}
+
+
+/* =========================================
+   掲示板表示
+========================================= */
 function showBoard() {
 
     modeSelect.style.display =
@@ -544,6 +615,23 @@ function showBoard() {
 
     postMessage.placeholder =
         "メッセージを書いてね！";
+
+
+    /* =========================
+       掲示板を表示したあと
+       最新投稿までスクロール
+    ========================== */
+
+    requestAnimationFrame(() => {
+
+        requestAnimationFrame(() => {
+
+            postList.scrollTop =
+                postList.scrollHeight;
+
+        });
+
+    });
 
 }
 
@@ -850,7 +938,7 @@ memberModeButton.addEventListener(
             false;
 
         memberModeButton.textContent =
-            "はい！会員です";
+            "はい";
 
     }
 );
@@ -961,6 +1049,18 @@ onSnapshot(
     postsQuery,
 
     snapshot => {
+
+        /*
+         * 更新前に、
+         * 現在一番下付近にいるか確認
+         */
+
+        const wasNearBottom =
+            postList.scrollHeight -
+            postList.scrollTop -
+            postList.clientHeight <
+            80;
+
 
         postList.innerHTML =
             "";
@@ -1262,7 +1362,28 @@ onSnapshot(
             }
         );
 
-        postList.scrollTop = postList.scrollHeight;
+
+        /*
+         * 初回表示なら一番下へ。
+         *
+         * すでに一番下付近にいる場合も
+         * 新しい投稿に合わせて一番下へ。
+         *
+         * 過去ログを読んでいる場合は
+         * 勝手に移動しない。
+         */
+
+        if (
+            !hasInitialScroll ||
+            wasNearBottom
+        ) {
+
+            scrollToLatest();
+
+            hasInitialScroll =
+                true;
+
+        }
 
     },
 
