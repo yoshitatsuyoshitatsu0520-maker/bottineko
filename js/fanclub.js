@@ -464,7 +464,7 @@ function displayMembers(list = members) {
         const isMine = member.id === myMemberId;
 
         let html =
-            '<div class="member-card-header">🥝 TEACH FAN CLUB</div>' +
+            '<div class="member-card-header">🥝 TEACH-KUN FAN CLUB</div>' +
             '<div class="member-number">No.' +
             String(member.number).padStart(4, "0") +
             '</div>' +
