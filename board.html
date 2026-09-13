@@ -10,11 +10,8 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>
-        総合掲示板｜ねこのティーチくんファンサイト
-    </title>
+    <title>総合掲示板｜ねこのティーチくんファンサイト</title>
 
-    <!-- ホームページと同じCSS -->
     <link
         rel="stylesheet"
         href="css/style.css"
@@ -22,992 +19,1375 @@
 
 </head>
 
-
 <body>
 
+<div class="background"></div>
 
-    <!-- =========================================
-         背景
-    ========================================= -->
+<main class="container">
 
-    <div class="background"></div>
+    <!-- =========================
+         ヘッダー
+    ========================== -->
 
+    <header class="board-page-header">
 
+        <h1>ねこティチファンクラブ総合掲示板</h1>
 
-    <!-- =========================================
-         メイン
-    ========================================= -->
+        <p>
+            ねこのティーチくんについて語ろうぜ！
+        </p>
 
-    <main class="container">
-
-
-        <!-- =====================================
-             タイトル
-        ====================================== -->
-
-        <header class="board-page-header">
-
-            <h1>
-                🐱 ねこティチファンクラブ総合掲示板
-            </h1>
-
-            <p>
-                ねこのティーチくんについて語ろうぜ！
-            </p>
-
-        </header>
+    </header>
 
 
+    <!-- =========================
+         投稿者モード選択
+    ========================== -->
 
-        <!-- =====================================
-             掲示板
-        ====================================== -->
+    <div
+        id="mode-select"
+        class="member-mode-box"
+    >
 
+        <h2>
+            確認
+        </h2>
 
+        <p>
+            あなたはファンクラブに参加していますか？
+        </p>
 
-            <!-- =================================
-                 投稿一覧
-            ================================== -->
+        <div class="mode-buttons">
 
-            <div id="post-list">
-
-
-                <div class="board-loading">
-
-                    投稿を読み込んでいます……🐱
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- =================================
-                 投稿フォーム
-            ================================== -->
-
-            <div class="post-form">
-
-
-                <h3>
-                    ✏️ 投稿する
-                </h3>
-
-
-
-                <!-- 会員情報 -->
-
-                <div
-                    class="member-info-box"
-                    id="member-info-box"
-                >
-
-                    <span>
-
-                        名前：
-
-                        <strong id="member-name">
-                            読み込み中...
-                        </strong>
-
-                    </span>
-
-
-                    <span>
-
-                        推し：
-
-                        <strong id="member-favorite">
-                            読み込み中...
-                        </strong>
-
-                    </span>
-
-                </div>
-
-
-
-                <!-- メッセージ -->
-
-                <textarea
-                    id="post-message"
-                    maxlength="1000"
-                    placeholder="メッセージを書いてね！"
-                ></textarea>
-
-
-
-                <!-- 投稿ボタン -->
-
-                <button
-                    id="post-button"
-                    type="button"
-                >
-                    投稿する
-                </button>
-
-
-            </div>
-
-
-        </section>
-
-
-
-        <!-- =====================================
-             戻る
-        ====================================== -->
-
-        <div class="board-back">
-
-            <a
-                href="index.html"
-                class="board-back-button"
+            <button
+                id="member-mode-button"
+                type="button"
             >
-                ← ファンサイトへ戻る
-            </a>
+                はい
+            </button>
+
+            <button
+                id="guest-mode-button"
+                type="button"
+            >
+                いいえ
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         会員情報選択
+    ========================== -->
+
+    <div
+        id="member-name-select"
+        class="member-mode-box"
+        style="display:none;"
+    >
+
+        <h2>
+            会員情報が見つかりました！
+        </h2>
+
+        <p>
+            登録している名前で投稿しますか？
+        </p>
+
+        <div class="member-info-box">
+
+            <span>
+                名前：
+                <strong id="found-member-name">
+                    ---
+                </strong>
+            </span>
+
+            <span>
+                推し：
+                <strong id="found-member-favorite">
+                    ---
+                </strong>
+            </span>
 
         </div>
 
 
-    </main>
+        <div class="mode-buttons">
+
+            <button
+                id="registered-name-button"
+                type="button"
+            >
+                登録名で投稿
+            </button>
+
+            <button
+                id="member-guest-button"
+                type="button"
+            >
+                ゲストとして投稿
+            </button>
+
+        </div>
+
+    </div>
 
 
+    <!-- =========================
+         手入力モード
+    ========================== -->
 
-    <!-- =========================================
-         Firebase / Firestore
-    ========================================= -->
+    <div
+        id="manual-member-mode"
+        class="member-mode-box"
+        style="display:none;"
+    >
 
-    <script type="module">
+        <h2>
+            会員情報を確認できませんでした
+        </h2>
 
+        <p>
+            名前を入力して、推しを選んでね！
+        </p>
 
-        import {
-
-            initializeApp
-
-        } from
-        "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-
-
-
-        import {
-
-            getFirestore,
-            collection,
-            getDocs,
-            addDoc,
-            query,
-            orderBy,
-            onSnapshot,
-            serverTimestamp
-
-        } from
-        "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+        <p>
+            ※ここで入力・選択した情報は会員情報には登録されません。
+        </p>
 
 
+        <div class="manual-input-area">
 
-        /* =====================================
-           Firebase設定
-        ====================================== */
+            <label for="manual-name">
+                名前
+            </label>
 
-        const firebaseConfig = {
-
-            apiKey:
-                "AIzaSyAIwaGRB6ffUB1t7emLsXqFpfYDQ5d7WjQ",
-
-            authDomain:
-                "teach-fanclub.firebaseapp.com",
-
-            projectId:
-                "teach-fanclub",
-
-            storageBucket:
-                "teach-fanclub.firebasestorage.app",
-
-            messagingSenderId:
-                "350154920039",
-
-            appId:
-                "1:350154920039:web:20f0f1c2fbe0780e1044c2"
-
-        };
+            <input
+                id="manual-name"
+                type="text"
+                maxlength="30"
+                placeholder="名前を入力してね"
+            >
 
 
+            <label for="manual-favorite">
+                推し
+            </label>
 
-        const app =
-            initializeApp(firebaseConfig);
+            <select id="manual-favorite">
+ <option value="ティーチ">ティーチ</option>
+                    <option value="サム">サム</option>
+                    <option value="コバヤシ">コバヤシ</option>
+                    <option value="だだ">だだ</option>
+                    <option value="ブライアン">ブライアン</option>
+                    <option value="大西">大西</option>
+                    <option value="スズノ">スズノ</option>
+                    <option value="終">終</option>
+                    <option value="フアン">フアン</option>
+                    <option value="デリート">デリート</option>
+                    <option value="レア">レア</option>
+                    <option value="ボツ">ボツ</option>
+                    <option value="オリ">オリ</option>
+                    <option value="スミス">スミス</option>
+                    <option value="ひみつの親友">ひみつの親友</option>
+                    <option value="箱推し">箱推し</option>
+                    <option value="その他">その他</option>
+
+            </select>
 
 
-        const db =
-            getFirestore(app);
+            <!-- その他を選んだときだけ表示 -->
+
+            <div
+                id="other-favorite-area"
+                style="display:none;"
+            >
+
+                <label for="other-favorite">
+                    推しの名前
+                </label>
+
+                <input
+                    id="other-favorite"
+                    type="text"
+                    maxlength="30"
+                    placeholder="推しの名前を入力してね"
+                >
+
+            </div>
+
+        </div>
 
 
+        <div class="mode-buttons">
 
-        /* =====================================
-           DOM
-        ====================================== */
+            <button
+                id="manual-start-button"
+                type="button"
+            >
+                この名前で投稿
+            </button>
 
-        const postList =
-            document.getElementById(
-                "post-list"
+            <button
+                id="manual-guest-button"
+                type="button"
+            >
+                ゲストとして投稿
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         掲示板
+    ========================== -->
+
+    <div
+        id="board-content"
+        style="display:none;"
+    >
+
+        <!-- 投稿一覧 -->
+
+        <section class="board-box">
+
+            <div class="board-box-header">
+                🥝 総合掲示板
+            </div>
+
+            <div id="post-list">
+
+                <div class="board-loading">
+                    投稿を読み込んでいます……
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- 投稿フォーム -->
+
+        <div class="post-form">
+
+            <h3>
+                ✏️ 投稿する
+            </h3>
+
+
+            <div
+                class="member-info-box"
+                id="member-info-box"
+            >
+
+                <span>
+                    名前：
+                    <strong id="member-name">
+                        ゲスト
+                    </strong>
+                </span>
+
+                <span>
+                    推し：
+                    <strong id="member-favorite">
+                        未設定
+                    </strong>
+                </span>
+
+            </div>
+
+
+            <textarea
+                id="post-message"
+                maxlength="1000"
+                placeholder="メッセージを書いてね！"
+            ></textarea>
+
+
+            <button
+                id="post-button"
+                type="button"
+            >
+                投稿する
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         戻る
+    ========================== -->
+
+    <div class="board-back">
+
+        <a
+            href="index.html"
+            class="board-back-button"
+        >
+            ← ファンサイトへ戻る
+        </a>
+
+    </div>
+
+</main>
+
+
+<script type="module">
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    addDoc,
+    query,
+    orderBy,
+    onSnapshot,
+    serverTimestamp,
+    deleteDoc,
+    doc
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+
+/* =========================================
+   Firebase
+========================================= */
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyAIwaGRB6ffUB1t7emLsXqFpfYDQ5d7WgQ",
+
+    authDomain:
+        "teach-fanclub.firebaseapp.com",
+
+    projectId:
+        "teach-fanclub",
+
+    storageBucket:
+        "teach-fanclub.firebasestorage.app",
+
+    messagingSenderId:
+        "350154920039",
+
+    appId:
+        "1:350154920039:web:20f0f1c2fbe0780e1044c2"
+
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+const db =
+    getFirestore(app);
+
+
+/* =========================================
+   HTML取得
+========================================= */
+
+const modeSelect =
+    document.getElementById("mode-select");
+
+const memberModeButton =
+    document.getElementById("member-mode-button");
+
+const guestModeButton =
+    document.getElementById("guest-mode-button");
+
+
+const memberNameSelect =
+    document.getElementById("member-name-select");
+
+const registeredNameButton =
+    document.getElementById("registered-name-button");
+
+const memberGuestButton =
+    document.getElementById("member-guest-button");
+
+
+const manualMemberMode =
+    document.getElementById("manual-member-mode");
+
+const manualName =
+    document.getElementById("manual-name");
+
+const manualFavorite =
+    document.getElementById("manual-favorite");
+
+const otherFavoriteArea =
+    document.getElementById("other-favorite-area");
+
+const otherFavorite =
+    document.getElementById("other-favorite");
+
+const manualStartButton =
+    document.getElementById("manual-start-button");
+
+const manualGuestButton =
+    document.getElementById("manual-guest-button");
+
+
+const boardContent =
+    document.getElementById("board-content");
+
+const postList =
+    document.getElementById("post-list");
+
+const postMessage =
+    document.getElementById("post-message");
+
+const postButton =
+    document.getElementById("post-button");
+
+
+const memberNameElement =
+    document.getElementById("member-name");
+
+const memberFavoriteElement =
+    document.getElementById("member-favorite");
+
+
+const foundMemberName =
+    document.getElementById("found-member-name");
+
+const foundMemberFavorite =
+    document.getElementById("found-member-favorite");
+
+
+/* =========================================
+   会員ID
+========================================= */
+
+const myMemberId =
+    localStorage.getItem(
+        "teachFanclubMyMemberId"
+    );
+
+
+/* =========================================
+   ゲストID
+========================================= */
+
+let myGuestId =
+    localStorage.getItem(
+        "teachFanclubGuestId"
+    );
+
+
+if (!myGuestId) {
+
+    myGuestId =
+        "guest_" +
+        Date.now() +
+        "_" +
+        Math.random()
+            .toString(36)
+            .substring(2);
+
+    localStorage.setItem(
+        "teachFanclubGuestId",
+        myGuestId
+    );
+
+}
+
+
+/* =========================================
+   投稿者情報
+========================================= */
+
+let memberName = "ゲスト";
+
+let memberFavorite = "未設定";
+
+let memberNumber = "";
+
+let isMember = false;
+
+
+/* =========================================
+   掲示板表示
+========================================= */
+
+function showBoard() {
+
+    modeSelect.style.display =
+        "none";
+
+    memberNameSelect.style.display =
+        "none";
+
+    manualMemberMode.style.display =
+        "none";
+
+    boardContent.style.display =
+        "block";
+
+    postMessage.disabled =
+        false;
+
+    postButton.disabled =
+        false;
+
+    postMessage.placeholder =
+        "メッセージを書いてね！";
+
+}
+
+
+/* =========================================
+   ゲストモード
+========================================= */
+
+function startGuestMode() {
+
+    memberName =
+        "ゲスト";
+
+    memberFavorite =
+        "未設定";
+
+    memberNumber =
+        "";
+
+    isMember =
+        false;
+
+
+    memberNameElement.textContent =
+        memberName;
+
+    memberFavoriteElement.textContent =
+        memberFavorite;
+
+
+    showBoard();
+
+}
+
+
+/* =========================================
+   手入力画面
+========================================= */
+
+function showManualMemberMode() {
+
+    modeSelect.style.display =
+        "none";
+
+    memberNameSelect.style.display =
+        "none";
+
+    manualMemberMode.style.display =
+        "block";
+
+}
+
+
+/* =========================================
+   「その他」の表示
+========================================= */
+
+manualFavorite.addEventListener(
+    "change",
+    () => {
+
+        if (
+            manualFavorite.value ===
+            "その他"
+        ) {
+
+            otherFavoriteArea.style.display =
+                "block";
+
+        } else {
+
+            otherFavoriteArea.style.display =
+                "none";
+
+            otherFavorite.value =
+                "";
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   手入力で開始
+========================================= */
+
+function startManualMode() {
+
+    const name =
+        manualName.value.trim();
+
+
+    if (!name) {
+
+        alert(
+            "名前を入力してね！🐱"
+        );
+
+        manualName.focus();
+
+        return;
+
+    }
+
+
+    let favorite =
+        manualFavorite.value;
+
+
+    if (!favorite) {
+
+        alert(
+            "推しを選んでね！🐱"
+        );
+
+        manualFavorite.focus();
+
+        return;
+
+    }
+
+
+    if (
+        favorite ===
+        "その他"
+    ) {
+
+        favorite =
+            otherFavorite.value.trim();
+
+
+        if (!favorite) {
+
+            alert(
+                "推しの名前を入力してね！🐱"
+            );
+
+            otherFavorite.focus();
+
+            return;
+
+        }
+
+    }
+
+
+    memberName =
+        name;
+
+    memberFavorite =
+        favorite;
+
+    memberNumber =
+        "";
+
+    isMember =
+        false;
+
+
+    memberNameElement.textContent =
+        memberName;
+
+    memberFavoriteElement.textContent =
+        memberFavorite;
+
+
+    showBoard();
+
+}
+
+
+/* =========================================
+   会員情報取得
+========================================= */
+
+async function loadMyMember() {
+
+    if (!myMemberId) {
+
+        showManualMemberMode();
+
+        return;
+
+    }
+
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "members"
+                )
             );
 
 
-        const postMessage =
-            document.getElementById(
-                "post-message"
-            );
+        let myMember = null;
 
 
-        const postButton =
-            document.getElementById(
-                "post-button"
-            );
+        snapshot.forEach(
+            memberDoc => {
 
+                if (
+                    memberDoc.id ===
+                    myMemberId
+                ) {
 
-        const memberNameElement =
-            document.getElementById(
-                "member-name"
-            );
+                    myMember = {
 
+                        id:
+                            memberDoc.id,
 
-        const memberFavoriteElement =
-            document.getElementById(
-                "member-favorite"
-            );
+                        ...memberDoc.data()
 
-
-
-        /* =====================================
-           自分の会員ID
-        ====================================== */
-
-        const myMemberId =
-            localStorage.getItem(
-                "teachFanclubMyMemberId"
-            );
-
-
-
-        /* =====================================
-           現在の会員情報
-        ====================================== */
-
-        let memberName =
-    "ゲスト";
-
-
-let memberFavorite =
-    "未設定";
-
-
-let memberNumber =
-    "";
-
-
-let isMember =
-    false;
-
-
-
-
-        /* =====================================
-           会員情報を取得
-        ====================================== */
-
-        async function loadMyMember() {
-
-
-            /*
-             * 会員IDがない
-             */
-
-            if (!myMemberId) {
-
-                memberNameElement.textContent =
-                    "ゲスト";
-
-                memberFavoriteElement.textContent =
-                    "未設定";
-
-
-                showGuestMode();
-
-
-                return;
-
-            }
-
-
-
-            try {
-
-
-                const snapshot =
-                    await getDocs(
-                        collection(
-                            db,
-                            "members"
-                        )
-                    );
-
-
-
-                let myMember =
-                    null;
-
-
-
-                snapshot.forEach(
-                    memberDoc => {
-
-
-                        if (
-                            memberDoc.id ===
-                            myMemberId
-                        ) {
-
-                            myMember = {
-
-                                id:
-                                    memberDoc.id,
-
-                                ...memberDoc.data()
-
-                            };
-
-                        }
-
-                    }
-                );
-
-
-
-                /*
-                 * 会員が見つからない
-                 */
-
-                if (!myMember) {
-
-
-                    console.warn(
-                        "自分の会員情報が見つかりませんでした。"
-                    );
-
-
-                    showGuestMode();
-
-
-                    return;
+                    };
 
                 }
 
-
-
-                /*
-                 * 会員情報を保存
-                 */
-
-                memberName =
-                    myMember.name ||
-                    "ゲスト";
-
-
-                memberFavorite =
-    myMember.favorite ||
-    "未設定";
-
-
-memberNumber =
-    myMember.number ||
-    "";
-
-
-isMember =
-    true;
-
-
-                /*
-                 * 画面に表示
-                 */
-
-                memberNameElement.textContent =
-                    memberName;
-
-
-                memberFavoriteElement.textContent =
-                    memberFavorite;
-
-
-
-                /*
-                 * 投稿可能にする
-                 */
-
-                postMessage.disabled =
-                    false;
-
-
-                postButton.disabled =
-                    false;
-
-
-                postMessage.placeholder =
-                    "メッセージを書いてね！";
-
-
-
-            } catch (error) {
-
-
-                console.error(
-                    "会員情報の取得に失敗しました。",
-                    error
-                );
-
-
-                showGuestMode();
-
             }
+        );
+
+
+        if (!myMember) {
+
+            console.warn(
+                "自分の会員情報が見つかりませんでした。"
+            );
+
+            showManualMemberMode();
+
+            return;
 
         }
 
 
+        memberName =
+            myMember.name ||
+            "ゲスト";
 
-        /* =====================================
-           ゲスト状態
-        ====================================== */
+        memberFavorite =
+            myMember.favorite ||
+            "未設定";
 
-        function showGuestMode() {
+        memberNumber =
+            myMember.number ||
+            "";
 
-
-            isMember =
-                false;
-
-
-            memberNameElement.textContent =
-                "ゲスト";
-
-
-            memberFavoriteElement.textContent =
-                "未設定";
+        isMember =
+            true;
 
 
-            postMessage.disabled =
-                true;
+        foundMemberName.textContent =
+            memberName;
+
+        foundMemberFavorite.textContent =
+            memberFavorite;
 
 
-            postButton.disabled =
-                true;
+        modeSelect.style.display =
+            "none";
+
+        manualMemberMode.style.display =
+            "none";
+
+        memberNameSelect.style.display =
+            "block";
 
 
-            postMessage.placeholder =
-                "掲示板に投稿するにはファンクラブへの参加が必要です。";
+    } catch (error) {
+
+        console.error(
+            "会員情報の取得に失敗しました。",
+            error
+        );
+
+        showManualMemberMode();
+
+    }
+
+}
+
+
+/* =========================================
+   会員
+========================================= */
+
+memberModeButton.addEventListener(
+    "click",
+    async () => {
+
+        memberModeButton.disabled =
+            true;
+
+        memberModeButton.textContent =
+            "会員情報を確認中……";
+
+
+        await loadMyMember();
+
+
+        memberModeButton.disabled =
+            false;
+
+        memberModeButton.textContent =
+            "はい！会員です";
+
+    }
+);
+
+
+/* =========================================
+   ゲスト
+========================================= */
+
+guestModeButton.addEventListener(
+    "click",
+    () => {
+
+        startGuestMode();
+
+    }
+);
+
+
+/* =========================================
+   登録名
+========================================= */
+
+registeredNameButton.addEventListener(
+    "click",
+    () => {
+
+        memberNameElement.textContent =
+            memberName;
+
+        memberFavoriteElement.textContent =
+            memberFavorite;
+
+        showBoard();
+
+    }
+);
+
+
+/* =========================================
+   会員 → ゲスト
+========================================= */
+
+memberGuestButton.addEventListener(
+    "click",
+    () => {
+
+        startGuestMode();
+
+    }
+);
+
+
+/* =========================================
+   手入力
+========================================= */
+
+manualStartButton.addEventListener(
+    "click",
+    () => {
+
+        startManualMode();
+
+    }
+);
+
+
+/* =========================================
+   手入力 → ゲスト
+========================================= */
+
+manualGuestButton.addEventListener(
+    "click",
+    () => {
+
+        startGuestMode();
+
+    }
+);
+
+
+/* =========================================
+   Firestore 投稿
+========================================= */
+
+const postsRef =
+    collection(
+        db,
+        "boardPosts"
+    );
+
+
+const postsQuery =
+    query(
+        postsRef,
+        orderBy(
+            "createdAt",
+            "asc"
+        )
+    );
+
+
+/* =========================================
+   投稿一覧
+========================================= */
+
+onSnapshot(
+    postsQuery,
+
+    snapshot => {
+
+        postList.innerHTML =
+            "";
+
+
+        if (snapshot.empty) {
+
+            postList.innerHTML = `
+
+                <div class="board-loading">
+
+                    まだ投稿がありません！<br>
+
+                    最初の投稿をしてみよう 🐱
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        snapshot.forEach(
+            postDoc => {
+
+                const post =
+                    postDoc.data();
+
+
+                const postElement =
+                    document.createElement(
+                        "article"
+                    );
+
+                postElement.className =
+                    "post-card";
+
+
+                /* 投稿者情報 */
+
+                const memberElement =
+                    document.createElement(
+                        "div"
+                    );
+
+                memberElement.className =
+                    "post-member";
+
+
+                const nameElement =
+                    document.createElement(
+                        "div"
+                    );
+
+                nameElement.className =
+                    "post-name";
+
+
+                nameElement.textContent =
+                    post.number
+
+                        ? "No." +
+                          String(
+                              post.number
+                          ).padStart(
+                              3,
+                              "0"
+                          ) +
+                          "　" +
+                          (
+                              post.name ||
+                              "名無し"
+                          )
+
+                        :
+
+                          (
+                              post.name ||
+                              "名無し"
+                          );
+
+
+                const favoriteElement =
+                    document.createElement(
+                        "div"
+                    );
+
+                favoriteElement.className =
+                    "post-favorite";
+
+
+                favoriteElement.textContent =
+                    "推し：" +
+                    (
+                        post.favorite ||
+                        "未設定"
+                    );
+
+
+                const dateElement =
+                    document.createElement(
+                        "div"
+                    );
+
+                dateElement.className =
+                    "post-date";
+
+
+                if (post.createdAt) {
+
+                    const date =
+                        post.createdAt.toDate();
+
+
+                    dateElement.textContent =
+
+                        date.getFullYear() +
+                        "/" +
+
+                        String(
+                            date.getMonth() + 1
+                        ).padStart(
+                            2,
+                            "0"
+                        ) +
+
+                        "/" +
+
+                        String(
+                            date.getDate()
+                        ).padStart(
+                            2,
+                            "0"
+                        ) +
+
+                        " " +
+
+                        String(
+                            date.getHours()
+                        ).padStart(
+                            2,
+                            "0"
+                        ) +
+
+                        ":" +
+
+                        String(
+                            date.getMinutes()
+                        ).padStart(
+                            2,
+                            "0"
+                        );
+
+                }
+
+
+                memberElement.appendChild(
+                    nameElement
+                );
+
+                memberElement.appendChild(
+                    favoriteElement
+                );
+
+                memberElement.appendChild(
+                    dateElement
+                );
+
+
+                /* 本文 */
+
+                const messageElement =
+                    document.createElement(
+                        "div"
+                    );
+
+                messageElement.className =
+                    "post-message";
+
+                messageElement.textContent =
+                    post.message ||
+                    "";
+
+
+                postElement.appendChild(
+                    memberElement
+                );
+
+                postElement.appendChild(
+                    messageElement
+                );
+
+
+                /* 削除ボタン */
+
+                const isMyMemberPost =
+                    post.memberId &&
+                    post.memberId ===
+                    myMemberId;
+
+
+                const isMyGuestPost =
+                    post.guestId &&
+                    post.guestId ===
+                    myGuestId;
+
+
+                if (
+                    isMyMemberPost ||
+                    isMyGuestPost
+                ) {
+
+                    const deleteButton =
+                        document.createElement(
+                            "button"
+                        );
+
+
+                    deleteButton.className =
+                        "post-delete-button";
+
+                    deleteButton.textContent =
+                        "🗑️ 削除";
+
+                    deleteButton.type =
+                        "button";
+
+
+                    deleteButton.addEventListener(
+                        "click",
+                        async () => {
+
+                            if (
+                                !confirm(
+                                    "この投稿を削除しますか？"
+                                )
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            try {
+
+                                deleteButton.disabled =
+                                    true;
+
+                                deleteButton.textContent =
+                                    "削除中……";
+
+
+                                await deleteDoc(
+                                    doc(
+                                        db,
+                                        "boardPosts",
+                                        postDoc.id
+                                    )
+                                );
+
+
+                            } catch (error) {
+
+                                console.error(
+                                    "投稿の削除に失敗しました。",
+                                    error
+                                );
+
+                                alert(
+                                    "投稿を削除できませんでした……"
+                                );
+
+
+                                deleteButton.disabled =
+                                    false;
+
+                                deleteButton.textContent =
+                                    "🗑️ 削除";
+
+                            }
+
+                        }
+                    );
+
+
+                    postElement.appendChild(
+                        deleteButton
+                    );
+
+                }
+
+
+                postList.appendChild(
+                    postElement
+                );
+
+            }
+        );
+
+        postList.scrollTop = postList.scrollHeight;
+
+    },
+
+    error => {
+
+        console.error(
+            "投稿の読み込みに失敗しました。",
+            error
+        );
+
+
+        postList.innerHTML = `
+
+            <div class="board-loading">
+
+                投稿を読み込めませんでした…<br>
+
+                Firebaseの設定やFirestoreのルールを確認してね。
+
+            </div>
+
+        `;
+
+    }
+);
+
+
+/* =========================================
+   投稿
+========================================= */
+
+postButton.addEventListener(
+    "click",
+    async () => {
+
+        const message =
+            postMessage.value.trim();
+
+
+        if (!message) {
+
+            alert(
+                "メッセージを入力してね！"
+            );
+
+            return;
+
+        }
+
+
+        postButton.disabled =
+            true;
+
+        postButton.textContent =
+            "投稿中……";
+
+
+        try {
+
+            await addDoc(
+                postsRef,
+                {
+
+                    name:
+                        memberName,
+
+                    favorite:
+                        memberFavorite,
+
+                    number:
+                        isMember
+                            ? memberNumber
+                            : "",
+
+                    memberId:
+                        isMember
+                            ? myMemberId
+                            : "",
+
+                    guestId:
+                        isMember
+                            ? ""
+                            : myGuestId,
+
+                    message:
+                        message,
+
+                    createdAt:
+                        serverTimestamp()
+
+                }
+            );
 
 
             postMessage.value =
                 "";
 
 
-        }
+        } catch (error) {
 
-
-
-        /* =====================================
-           投稿一覧
-        ====================================== */
-
-        const postsRef =
-            collection(
-                db,
-                "boardPosts"
+            console.error(
+                "投稿に失敗しました。",
+                error
             );
 
 
-
-        const postsQuery =
-            query(
-                postsRef,
-                orderBy(
-                    "createdAt",
-                    "asc"
-                )
+            alert(
+                "投稿できませんでした……"
             );
 
 
+        } finally {
 
-        onSnapshot(
-            postsQuery,
-            snapshot => {
+            postButton.disabled =
+                false;
 
-
-                postList.innerHTML =
-                    "";
-
-
-
-                /*
-                 * 投稿がない場合
-                 */
-
-                if (
-                    snapshot.empty
-                ) {
-
-
-                    postList.innerHTML = `
-
-                        <div class="board-loading">
-
-                            まだ投稿がありません！<br>
-
-                            最初の投稿をしてみよう
-
-                        </div>
-
-                    `;
-
-
-                    return;
-
-                }
-
-
-
-                /*
-                 * 投稿を表示
-                 */
-
-                snapshot.forEach(
-                    postDoc => {
-
-
-                        const post =
-                            postDoc.data();
-
-
-
-                        const postElement =
-                            document.createElement(
-                                "article"
-                            );
-
-
-                        postElement.className =
-                            "post-card";
-
-
-
-                        /*
-                         * 投稿者情報
-                         */
-
-                        const memberElement =
-                            document.createElement(
-                                "div"
-                            );
-
-
-                        memberElement.className =
-                            "post-member";
-
-
-
-                        const nameElement =
-                            document.createElement(
-                                "div"
-                            );
-
-
-                        nameElement.className =
-                            "post-name";
-
-
-                        nameElement.textContent =
-    post.number
-        ? "No." +
-          String(post.number).padStart(3, "0") +
-          "　" +
-          (post.name || "名無し")
-        : (post.name || "名無し");
-
-                        const favoriteElement =
-                            document.createElement(
-                                "div"
-                            );
-
-
-                        favoriteElement.className =
-                            "post-favorite";
-
-
-                        favoriteElement.textContent =
-                            "推し：" +
-                            (
-                                post.favorite ||
-                                "未設定"
-                            );
-
-                            const dateElement =
-    document.createElement(
-        "div"
-    );
-
-
-dateElement.className =
-    "post-date";
-
-
-if (post.createdAt) {
-
-    const date =
-        post.createdAt.toDate();
-
-    dateElement.textContent =
-        date.getFullYear() +
-        "/" +
-        String(date.getMonth() + 1).padStart(2, "0") +
-        "/" +
-        String(date.getDate()).padStart(2, "0") +
-        " " +
-        String(date.getHours()).padStart(2, "0") +
-        ":" +
-        String(date.getMinutes()).padStart(2, "0");
-
-}
-
-
-
-                        memberElement.appendChild(
-    nameElement
-);
-
-
-memberElement.appendChild(
-    favoriteElement
-);
-
-
-memberElement.appendChild(
-    dateElement
-);
-
-
-                        /*
-                         * 本文
-                         */
-
-                        const messageElement =
-                            document.createElement(
-                                "div"
-                            );
-
-
-                        messageElement.className =
-                            "post-message";
-
-
-                        messageElement.textContent =
-                            post.message ||
-                            "";
-
-
-
-                        /*
-                         * 投稿カード完成
-                         */
-
-                        /*
- * 投稿カード完成
- */
-
-postElement.appendChild(
-    memberElement
-);
-
-
-postElement.appendChild(
-    messageElement
-);
-
-
-/* =====================================
-   自分の投稿なら削除ボタンを表示
-===================================== */
-
-if (
-    post.memberId &&
-    post.memberId === myMemberId
-) {
-
-    const deleteButton =
-        document.createElement(
-            "button"
-        );
-
-
-    deleteButton.className =
-        "post-delete-button";
-
-
-    deleteButton.textContent =
-        "🗑️ 削除";
-
-
-    deleteButton.type =
-        "button";
-
-
-    deleteButton.addEventListener(
-        "click",
-        async () => {
-
-            const confirmed =
-                confirm(
-                    "この投稿を削除しますか？"
-                );
-
-
-            if (!confirmed) {
-
-                return;
-
-            }
-
-
-            try {
-
-                deleteButton.disabled =
-                    true;
-
-                deleteButton.textContent =
-                    "削除中……";
-
-
-                await deleteDoc(
-                    doc(
-                        db,
-                        "boardPosts",
-                        postDoc.id
-                    )
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "投稿の削除に失敗しました。",
-                    error
-                );
-
-
-                alert(
-                    "投稿を削除できませんでした……"
-                );
-
-
-                deleteButton.disabled =
-                    false;
-
-                deleteButton.textContent =
-                    "🗑️ 削除";
-
-            }
+            postButton.textContent =
+                "投稿する";
 
         }
-    );
-
-
-    postElement.appendChild(
-        deleteButton
-    );
-
-}
-
-
-postList.appendChild(
-    postElement
-);
-
-                    }
-                );
-
-
-            },
-
-            error => {
-
-
-                console.error(
-                    "投稿の読み込みに失敗しました。",
-                    error
-                );
-
-
-                postList.innerHTML = `
-
-                    <div class="board-loading">
-
-                        投稿を読み込めませんでした…<br>
-
-                        Firebaseの設定や
-                        Firestoreのルールを確認してね。
-
-                    </div>
-
-                `;
-
-            }
-        );
-
-
-
-        /* =====================================
-           投稿する
-        ====================================== */
-
-        postButton.addEventListener(
-            "click",
-            async () => {
-
-
-                /*
-                 * 会員チェック
-                 */
-
-                if (!isMember) {
-
-                    alert(
-                        "掲示板への投稿にはファンクラブへの参加が必要です！🐱"
-                    );
-
-                    return;
-
-                }
-
-
-
-                /*
-                 * メッセージ取得
-                 */
-
-                const message =
-                    postMessage.value.trim();
-
-
-
-                /*
-                 * 空欄チェック
-                 */
-
-                if (!message) {
-
-                    alert(
-                        "メッセージを入力してね！"
-                    );
-
-                    return;
-
-                }
-
-
-
-                /*
-                 * 投稿中
-                 */
-
-                postButton.disabled =
-                    true;
-
-
-                postButton.textContent =
-                    "投稿中……";
-
-
-
-                try {
-
-
-                    await addDoc(
-    postsRef,
-    {
-
-        
-        name:
-            memberName,
-
-        favorite:
-            memberFavorite,
-
-        number:
-            memberNumber,
-
-        memberId:
-            myMemberId,
-
-        message:
-            message,
-
-        createdAt:
-            serverTimestamp()
 
     }
 );
 
-
-
-                    /*
-                     * 入力欄を空にする
-                     */
-
-                    postMessage.value =
-                        "";
-
-
-
-                } catch (error) {
-
-
-                    console.error(
-                        "投稿に失敗しました。",
-                        error
-                    );
-
-
-                    alert(
-                        "投稿できませんでした…"
-                    );
-
-
-                } finally {
-
-
-                    postButton.disabled =
-                        false;
-
-
-                    postButton.textContent =
-                        "投稿する";
-
-
-                }
-
-            }
-        );
-
-
-
-        /* =====================================
-           会員情報読み込み開始
-        ====================================== */
-
-        loadMyMember();
-
-
-    </script>
-
+</script>
 
 </body>
-
 </html>
