@@ -381,29 +381,7 @@
                 maxlength="1000"
                 placeholder="メッセージを書く"
             ></textarea>
-
-            <div class="image-upload-area">
-
-    <label
-        for="post-image"
-        class="image-upload-button"
-    >
-        📷 画像を選択
-    </label>
-
-    <input
-        id="post-image"
-        type="file"
-        accept="image/png,image/jpeg,image/gif,image/webp"
-        style="display:none;"
-    >
-
-    <div
-        id="image-preview"
-        class="image-preview"
-    ></div>
-
-</div>
+            
 
 
             <button
@@ -474,12 +452,7 @@ import {
     doc
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
-import {
-    getStorage,
-    ref,
-    uploadBytes,
-    getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-storage.js";
+
 /* =========================================
    Firebase
 ========================================= */
@@ -512,11 +485,7 @@ const app =
 
 const db =
     getFirestore(app);
-const storage =
-    getStorage(app);
-/* =========================================
-   画像プレビュー
-========================================= */
+
 
 /* =========================================
    HTML取得
@@ -573,63 +542,8 @@ const postMessage =
 const postButton =
     document.getElementById("post-button");
 
-const postImage =
-    document.getElementById("post-image");
-
-const imagePreview =
-    document.getElementById("image-preview");
-
-
-/* =========================================
-   画像プレビュー
-========================================= */
-
-postImage.addEventListener(
-    "change",
-    () => {
-
-        imagePreview.innerHTML = "";
-
-        const file =
-            postImage.files[0];
-
-        if (!file) {
-            return;
-        }
-
-        if (
-            file.size >
-            5 * 1024 * 1024
-        ) {
-
-            alert(
-                "画像は5MB以下にしてね！"
-            );
-
-            postImage.value = "";
-
-            return;
-        }
-
-        const image =
-            document.createElement("img");
-
-        image.src =
-            URL.createObjectURL(file);
-
-        image.alt =
-            "投稿画像プレビュー";
-
-        imagePreview.appendChild(
-            image
-        );
-
-    }
-);
-
 const memberNameElement =
     document.getElementById("member-name");
-    
 
 const memberFavoriteElement =
     document.getElementById("member-favorite");
@@ -1617,47 +1531,6 @@ function renderPost(
         messageElement
     );
 
-    /* =====================================
-   投稿画像
-===================================== */
-
-if (post.imageUrl) {
-
-    const imageElement =
-        document.createElement("img");
-
-    imageElement.className =
-        "post-image";
-
-    imageElement.src =
-        post.imageUrl;
-
-    imageElement.alt =
-        "投稿画像";
-
-    imageElement.loading =
-        "lazy";
-
-
-    imageElement.addEventListener(
-        "click",
-        () => {
-
-            window.open(
-                post.imageUrl,
-                "_blank"
-            );
-
-        }
-    );
-
-
-    postElement.appendChild(
-        imageElement
-    );
-
-}
-
 
     /* =====================================
        ボタンエリア
@@ -1848,28 +1721,18 @@ postButton.addEventListener(
     async () => {
 
         const message =
-    postMessage.value.trim();
-
-const imageFile =
-    postImage.files[0];
+            postMessage.value.trim();
 
 
-/*
- * メッセージも画像もない場合
- */
+        if (!message) {
 
-if (
-    !message &&
-    !imageFile
-) {
+            alert(
+                "メッセージを入力してね！"
+            );
 
-    alert(
-        "メッセージか画像を入れてね！"
-    );
+            return;
 
-    return;
-
-}
+        }
 
 
         postButton.disabled =
@@ -1882,99 +1745,52 @@ if (
 
 
         try {
-            let imageUrl = "";
-let imagePath = "";
-
-if (imageFile) {
-
-    const safeFileName =
-        imageFile.name
-            .replace(
-                /[^a-zA-Z0-9._-]/g,
-                "_"
-            );
-
-    imagePath =
-        "boardImages/" +
-        myGuestId +
-        "_" +
-        Date.now() +
-        "_" +
-        safeFileName;
-
-
-    const imageRef =
-        ref(
-            storage,
-            imagePath
-        );
-
-
-    await uploadBytes(
-        imageRef,
-        imageFile
-    );
-
-
-    imageUrl =
-        await getDownloadURL(
-            imageRef
-        );
-
-}
 
             await addDoc(
-    postsRef,
-    {
+                postsRef,
+                {
 
-        name:
-            memberName,
+                    name:
+                        memberName,
 
-        favorite:
-            memberFavorite,
+                    favorite:
+                        memberFavorite,
 
-        number:
-            isMember
-                ? memberNumber
-                : "",
+                    number:
+                        isMember
+                            ? memberNumber
+                            : "",
 
-        memberId:
-            isMember
-                ? myMemberId
-                : "",
+                    memberId:
+                        isMember
+                            ? myMemberId
+                            : "",
 
-        guestId:
-            isMember
-                ? ""
-                : myGuestId,
+                    guestId:
+                        isMember
+                            ? ""
+                            : myGuestId,
 
-        message:
-            message,
+                    message:
+                        message,
 
-        imageUrl:
-            imageUrl,
+                    /*
+                     * 通常投稿なら空文字。
+                     * 返信なら親投稿のID。
+                     */
 
-        imagePath:
-            imagePath,
+                    parentId:
+                        replyParentId || "",
 
-        parentId:
-            replyParentId || "",
+                    createdAt:
+                        serverTimestamp()
 
-        createdAt:
-            serverTimestamp()
-
-    }
-);
+                }
+            );
 
 
             postMessage.value =
                 "";
-
-                postImage.value =
-    "";
-
-imagePreview.innerHTML =
-    "";
 
 
             /*
