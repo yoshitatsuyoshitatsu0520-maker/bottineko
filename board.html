@@ -178,10 +178,6 @@
 
             <select id="manual-favorite">
 
-                <option value="">
-                    推しを選ぶ
-                </option>
-
                 <option value="ティーチ">
                     ティーチ
                 </option>
@@ -311,7 +307,7 @@
         <section class="board-box">
 
             <div class="board-box-header">
-                🥝 総合掲示板
+                🥝 総合掲示板（上にスクロールできます）
             </div>
 
             <div id="post-list">
@@ -325,11 +321,35 @@
         </section>
 
 
-        <!-- 投稿フォーム -->
+        <!-- =========================
+             投稿フォーム
+        ========================== -->
 
         <div class="post-form">
 
-            <h3>
+            <!-- 返信モード表示 -->
+
+            <div
+                id="reply-info"
+                class="reply-info"
+                style="display:none;"
+            >
+
+                <span id="reply-target">
+                    返信先：---
+                </span>
+
+                <button
+                    id="cancel-reply-button"
+                    type="button"
+                >
+                    返信をキャンセル
+                </button>
+
+            </div>
+
+
+            <h3 id="post-form-title">
                 ✏️ 投稿する
             </h3>
 
@@ -515,6 +535,18 @@ const foundMemberName =
 const foundMemberFavorite =
     document.getElementById("found-member-favorite");
 
+const replyInfo =
+    document.getElementById("reply-info");
+
+const replyTarget =
+    document.getElementById("reply-target");
+
+const cancelReplyButton =
+    document.getElementById("cancel-reply-button");
+
+const postFormTitle =
+    document.getElementById("post-form-title");
+
 
 /* =========================================
    会員ID
@@ -568,6 +600,17 @@ let isMember = false;
 
 
 /* =========================================
+   返信状態
+========================================= */
+
+let replyParentId = "";
+
+let replyParentNumber = "";
+
+let replyParentName = "";
+
+
+/* =========================================
    初回スクロール判定
 ========================================= */
 
@@ -593,6 +636,7 @@ function scrollToLatest() {
 /* =========================================
    掲示板表示
 ========================================= */
+
 function showBoard() {
 
     modeSelect.style.display =
@@ -617,17 +661,14 @@ function showBoard() {
         "メッセージを書いてね！";
 
 
-    /* =========================
-       掲示板を表示したあと
-       最新投稿までスクロール
-    ========================== */
-
     requestAnimationFrame(() => {
 
         requestAnimationFrame(() => {
 
-            postList.scrollTop =
-                postList.scrollHeight;
+            scrollToLatest();
+
+            hasInitialScroll =
+                true;
 
         });
 
@@ -728,7 +769,7 @@ function startManualMode() {
     if (!name) {
 
         alert(
-            "名前を入力してね！🐱"
+            "名前を入力してね！"
         );
 
         manualName.focus();
@@ -745,7 +786,7 @@ function startManualMode() {
     if (!favorite) {
 
         alert(
-            "推しを選んでね！🐱"
+            "推しを選んでね！"
         );
 
         manualFavorite.focus();
@@ -767,7 +808,7 @@ function startManualMode() {
         if (!favorite) {
 
             alert(
-                "推しの名前を入力してね！🐱"
+                "推しの名前を入力してね！"
             );
 
             otherFavorite.focus();
@@ -1021,6 +1062,115 @@ manualGuestButton.addEventListener(
 
 
 /* =========================================
+   返信モード開始
+========================================= */
+
+function startReplyMode(
+    postId,
+    postNumber,
+    postName
+) {
+
+    replyParentId =
+        postId;
+
+    replyParentNumber =
+        postNumber;
+
+    replyParentName =
+        postName;
+
+
+    replyInfo.style.display =
+        "flex";
+
+
+    replyTarget.textContent =
+        postNumber
+            ? "返信先：No." +
+              String(postNumber).padStart(3, "0") +
+              "　" +
+              postName
+            : "返信先：" +
+              postName;
+
+
+    postFormTitle.textContent =
+        "💬 返信する";
+
+
+    postButton.textContent =
+        "返信する";
+
+
+    postMessage.placeholder =
+        "返信メッセージを書く";
+
+
+    postMessage.focus();
+
+
+    /* 投稿フォームへ移動 */
+
+    document
+        .querySelector(".post-form")
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+}
+
+
+/* =========================================
+   返信キャンセル
+========================================= */
+
+function cancelReply() {
+
+    replyParentId =
+        "";
+
+    replyParentNumber =
+        "";
+
+    replyParentName =
+        "";
+
+
+    replyInfo.style.display =
+        "none";
+
+
+    postFormTitle.textContent =
+        "✏️ 投稿する";
+
+
+    postButton.textContent =
+        "投稿する";
+
+
+    postMessage.placeholder =
+        "メッセージを書く";
+
+}
+
+
+/* =========================================
+   返信キャンセルボタン
+========================================= */
+
+cancelReplyButton.addEventListener(
+    "click",
+    () => {
+
+        cancelReply();
+
+    }
+);
+
+
+/* =========================================
    Firestore 投稿
 ========================================= */
 
@@ -1049,11 +1199,6 @@ onSnapshot(
     postsQuery,
 
     snapshot => {
-
-        /*
-         * 更新前に、
-         * 現在一番下付近にいるか確認
-         */
 
         const wasNearBottom =
             postList.scrollHeight -
@@ -1085,292 +1230,74 @@ onSnapshot(
         }
 
 
+        /*
+         * 通常投稿を先に表示
+         */
+
+        const posts = [];
+
         snapshot.forEach(
             postDoc => {
 
-                const post =
-                    postDoc.data();
+                posts.push({
 
+                    id:
+                        postDoc.id,
 
-                const postElement =
-                    document.createElement(
-                        "article"
-                    );
+                    ...postDoc.data()
 
-                postElement.className =
-                    "post-card";
-
-
-                /* 投稿者情報 */
-
-                const memberElement =
-                    document.createElement(
-                        "div"
-                    );
-
-                memberElement.className =
-                    "post-member";
-
-
-                const nameElement =
-                    document.createElement(
-                        "div"
-                    );
-
-                nameElement.className =
-                    "post-name";
-
-
-                nameElement.textContent =
-                    post.number
-
-                        ? "No." +
-                          String(
-                              post.number
-                          ).padStart(
-                              3,
-                              "0"
-                          ) +
-                          "　" +
-                          (
-                              post.name ||
-                              "名無し"
-                          )
-
-                        :
-
-                          (
-                              post.name ||
-                              "名無し"
-                          );
-
-
-                const favoriteElement =
-                    document.createElement(
-                        "div"
-                    );
-
-                favoriteElement.className =
-                    "post-favorite";
-
-
-                favoriteElement.textContent =
-                    "推し：" +
-                    (
-                        post.favorite ||
-                        "未設定"
-                    );
-
-
-                const dateElement =
-                    document.createElement(
-                        "div"
-                    );
-
-                dateElement.className =
-                    "post-date";
-
-
-                if (post.createdAt) {
-
-                    const date =
-                        post.createdAt.toDate();
-
-
-                    dateElement.textContent =
-
-                        date.getFullYear() +
-                        "/" +
-
-                        String(
-                            date.getMonth() + 1
-                        ).padStart(
-                            2,
-                            "0"
-                        ) +
-
-                        "/" +
-
-                        String(
-                            date.getDate()
-                        ).padStart(
-                            2,
-                            "0"
-                        ) +
-
-                        " " +
-
-                        String(
-                            date.getHours()
-                        ).padStart(
-                            2,
-                            "0"
-                        ) +
-
-                        ":" +
-
-                        String(
-                            date.getMinutes()
-                        ).padStart(
-                            2,
-                            "0"
-                        );
-
-                }
-
-
-                memberElement.appendChild(
-                    nameElement
-                );
-
-                memberElement.appendChild(
-                    favoriteElement
-                );
-
-                memberElement.appendChild(
-                    dateElement
-                );
-
-
-                /* 本文 */
-
-                const messageElement =
-                    document.createElement(
-                        "div"
-                    );
-
-                messageElement.className =
-                    "post-message";
-
-                messageElement.textContent =
-                    post.message ||
-                    "";
-
-
-                postElement.appendChild(
-                    memberElement
-                );
-
-                postElement.appendChild(
-                    messageElement
-                );
-
-
-                /* 削除ボタン */
-
-                const isMyMemberPost =
-                    post.memberId &&
-                    post.memberId ===
-                    myMemberId;
-
-
-                const isMyGuestPost =
-                    post.guestId &&
-                    post.guestId ===
-                    myGuestId;
-
-
-                if (
-                    isMyMemberPost ||
-                    isMyGuestPost
-                ) {
-
-                    const deleteButton =
-                        document.createElement(
-                            "button"
-                        );
-
-
-                    deleteButton.className =
-                        "post-delete-button";
-
-                    deleteButton.textContent =
-                        "🗑️ 削除";
-
-                    deleteButton.type =
-                        "button";
-
-
-                    deleteButton.addEventListener(
-                        "click",
-                        async () => {
-
-                            if (
-                                !confirm(
-                                    "この投稿を削除しますか？"
-                                )
-                            ) {
-
-                                return;
-
-                            }
-
-
-                            try {
-
-                                deleteButton.disabled =
-                                    true;
-
-                                deleteButton.textContent =
-                                    "削除中……";
-
-
-                                await deleteDoc(
-                                    doc(
-                                        db,
-                                        "boardPosts",
-                                        postDoc.id
-                                    )
-                                );
-
-
-                            } catch (error) {
-
-                                console.error(
-                                    "投稿の削除に失敗しました。",
-                                    error
-                                );
-
-                                alert(
-                                    "投稿を削除できませんでした……"
-                                );
-
-
-                                deleteButton.disabled =
-                                    false;
-
-                                deleteButton.textContent =
-                                    "🗑️ 削除";
-
-                            }
-
-                        }
-                    );
-
-
-                    postElement.appendChild(
-                        deleteButton
-                    );
-
-                }
-
-
-                postList.appendChild(
-                    postElement
-                );
+                });
 
             }
         );
 
 
         /*
-         * 初回表示なら一番下へ。
-         *
-         * すでに一番下付近にいる場合も
-         * 新しい投稿に合わせて一番下へ。
-         *
-         * 過去ログを読んでいる場合は
-         * 勝手に移動しない。
+         * 通常投稿
+         */
+
+        posts
+            .filter(
+                post =>
+                    !post.parentId
+            )
+            .forEach(
+                post => {
+
+                    renderPost(
+                        post,
+                        false
+                    );
+
+
+                    /*
+                     * この投稿への返信
+                     */
+
+                    posts
+                        .filter(
+                            reply =>
+                                reply.parentId ===
+                                post.id
+                        )
+                        .forEach(
+                            reply => {
+
+                                renderPost(
+                                    reply,
+                                    true
+                                );
+
+                            }
+                        );
+
+                }
+            );
+
+
+        /*
+         * 初回表示・最下部付近なら
+         * 最新位置へ
          */
 
         if (
@@ -1412,7 +1339,368 @@ onSnapshot(
 
 
 /* =========================================
-   投稿
+   投稿を画面に表示
+========================================= */
+
+function renderPost(
+    post,
+    isReply
+) {
+
+    const postElement =
+        document.createElement(
+            "article"
+        );
+
+
+    postElement.className =
+        isReply
+            ? "post-card reply-card"
+            : "post-card";
+
+
+    /* =====================================
+       投稿者情報
+    ===================================== */
+
+    const memberElement =
+        document.createElement(
+            "div"
+        );
+
+    memberElement.className =
+        "post-member";
+
+
+    const nameElement =
+        document.createElement(
+            "div"
+        );
+
+    nameElement.className =
+        "post-name";
+
+
+    nameElement.textContent =
+        post.number
+
+            ? "No." +
+              String(
+                  post.number
+              ).padStart(
+                  3,
+                  "0"
+              ) +
+              "　" +
+              (
+                  post.name ||
+                  "名無し"
+              )
+
+            :
+
+              (
+                  post.name ||
+                  "名無し"
+              );
+
+
+    const favoriteElement =
+        document.createElement(
+            "div"
+        );
+
+    favoriteElement.className =
+        "post-favorite";
+
+
+    favoriteElement.textContent =
+        "推し：" +
+        (
+            post.favorite ||
+            "未設定"
+        );
+
+
+    const dateElement =
+        document.createElement(
+            "div"
+        );
+
+    dateElement.className =
+        "post-date";
+
+
+    if (post.createdAt) {
+
+        const date =
+            post.createdAt.toDate();
+
+
+        dateElement.textContent =
+
+            date.getFullYear() +
+            "/" +
+
+            String(
+                date.getMonth() + 1
+            ).padStart(
+                2,
+                "0"
+            ) +
+
+            "/" +
+
+            String(
+                date.getDate()
+            ).padStart(
+                2,
+                "0"
+            ) +
+
+            " " +
+
+            String(
+                date.getHours()
+            ).padStart(
+                2,
+                "0"
+            ) +
+
+            ":" +
+
+            String(
+                date.getMinutes()
+            ).padStart(
+                2,
+                "0"
+            );
+
+    }
+
+
+    memberElement.appendChild(
+        nameElement
+    );
+
+    memberElement.appendChild(
+        favoriteElement
+    );
+
+    memberElement.appendChild(
+        dateElement
+    );
+
+
+    /* =====================================
+       本文
+    ===================================== */
+
+    const messageElement =
+        document.createElement(
+            "div"
+        );
+
+    messageElement.className =
+        "post-message";
+
+
+    messageElement.textContent =
+        post.message ||
+        "";
+
+
+    postElement.appendChild(
+        memberElement
+    );
+
+    postElement.appendChild(
+        messageElement
+    );
+
+
+    /* =====================================
+       ボタンエリア
+    ===================================== */
+
+    const actionArea =
+        document.createElement(
+            "div"
+        );
+
+    actionArea.className =
+        "post-action-area";
+
+
+    /*
+     * 通常投稿だけ返信可能
+     */
+
+    if (!isReply) {
+
+        const replyButton =
+            document.createElement(
+                "button"
+            );
+
+
+        replyButton.className =
+            "post-reply-button";
+
+        replyButton.textContent =
+            "💬 返信する";
+
+        replyButton.type =
+            "button";
+
+
+        replyButton.addEventListener(
+            "click",
+            () => {
+
+                startReplyMode(
+                    post.id,
+                    post.number || "",
+                    post.name || "名無し"
+                );
+
+            }
+        );
+
+
+        actionArea.appendChild(
+            replyButton
+        );
+
+    }
+
+
+    /* =====================================
+       自分の投稿なら削除
+    ===================================== */
+
+    const isMyMemberPost =
+        post.memberId &&
+        post.memberId ===
+        myMemberId;
+
+
+    const isMyGuestPost =
+        post.guestId &&
+        post.guestId ===
+        myGuestId;
+
+
+    if (
+        isMyMemberPost ||
+        isMyGuestPost
+    ) {
+
+        const deleteButton =
+            document.createElement(
+                "button"
+            );
+
+
+        deleteButton.className =
+            "post-delete-button";
+
+        deleteButton.textContent =
+            "🗑️ 削除";
+
+        deleteButton.type =
+            "button";
+
+
+        deleteButton.addEventListener(
+            "click",
+            async () => {
+
+                if (
+                    !confirm(
+                        "この投稿を削除しますか？"
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                try {
+
+                    deleteButton.disabled =
+                        true;
+
+                    deleteButton.textContent =
+                        "削除中……";
+
+
+                    await deleteDoc(
+                        doc(
+                            db,
+                            "boardPosts",
+                            post.id
+                        )
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "投稿の削除に失敗しました。",
+                        error
+                    );
+
+
+                    alert(
+                        "投稿を削除できませんでした……"
+                    );
+
+
+                    deleteButton.disabled =
+                        false;
+
+                    deleteButton.textContent =
+                        "🗑️ 削除";
+
+                }
+
+            }
+        );
+
+
+        actionArea.appendChild(
+            deleteButton
+        );
+
+    }
+
+
+    /*
+     * ボタンがある場合だけ追加
+     */
+
+    if (
+        actionArea.children.length > 0
+    ) {
+
+        postElement.appendChild(
+            actionArea
+        );
+
+    }
+
+
+    postList.appendChild(
+        postElement
+    );
+
+}
+
+
+/* =========================================
+   投稿・返信
 ========================================= */
 
 postButton.addEventListener(
@@ -1438,7 +1726,9 @@ postButton.addEventListener(
             true;
 
         postButton.textContent =
-            "投稿中……";
+            replyParentId
+                ? "返信中……"
+                : "投稿中……";
 
 
         try {
@@ -1471,6 +1761,14 @@ postButton.addEventListener(
                     message:
                         message,
 
+                    /*
+                     * 通常投稿なら空文字。
+                     * 返信なら親投稿のID。
+                     */
+
+                    parentId:
+                        replyParentId || "",
+
                     createdAt:
                         serverTimestamp()
 
@@ -1480,6 +1778,13 @@ postButton.addEventListener(
 
             postMessage.value =
                 "";
+
+
+            /*
+             * 返信モードを解除
+             */
+
+            cancelReply();
 
 
         } catch (error) {
@@ -1500,8 +1805,11 @@ postButton.addEventListener(
             postButton.disabled =
                 false;
 
+
             postButton.textContent =
-                "投稿する";
+                replyParentId
+                    ? "返信する"
+                    : "投稿する";
 
         }
 

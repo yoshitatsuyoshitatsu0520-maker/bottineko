@@ -3657,3 +3657,135 @@ button:disabled {
     }
 
 }
+
+/* =========================================
+   投稿ボタンエリア
+========================================= */
+
+.post-action-area {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 10px;
+}
+
+
+/* =========================================
+   返信ボタン
+========================================= */
+
+.post-reply-button {
+    padding: 5px 10px;
+
+    border: 1px solid #cbdfe7;
+
+    border-radius: 999px;
+
+    background: white;
+
+    color: #6f92a0;
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+
+.post-reply-button:hover {
+    background: #f1fbff;
+}
+
+
+/* =========================================
+   返信投稿
+========================================= */
+
+.reply-card {
+    margin-left: 35px;
+
+    padding-left: 20px;
+
+    border-left:
+        3px solid #d9edf4;
+
+    background:
+        rgba(239, 249, 252, 0.45);
+}
+
+
+/* =========================================
+   返信フォーム
+========================================= */
+
+.reply-info {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+
+    padding: 10px 14px;
+
+    border-radius: 10px;
+
+    background:
+        #eef9fc;
+
+    border:
+        1px solid #d2eaf1;
+
+    color: #628592;
+
+    font-size: 13px;
+}
+
+
+#cancel-reply-button {
+    padding: 4px 9px;
+
+    border: 1px solid #cbdfe7;
+
+    border-radius: 999px;
+
+    background: white;
+
+    color: #7896a3;
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+
+#cancel-reply-button:hover {
+    background: #f5fbfd;
+}
+
+
+/* =========================================
+   スマホ
+========================================= */
+
+@media (max-width: 600px) {
+
+    .reply-card {
+        margin-left: 15px;
+
+        padding-left: 14px;
+    }
+
+
+    .reply-info {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+}
