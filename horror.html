@@ -368,7 +368,11 @@ body {
 </head>
 
 <body>
-
+<audio
+    id="bgm"
+    src="audio/no.mp3"
+    loop
+></audio>
 <div id="screen">
 
   <div class="content">
@@ -650,6 +654,15 @@ next.addEventListener("click", resetIdle);
 resetIdle();
 
 </script>
+<script>
 
+const bgm =
+    document.getElementById("bgm");
+
+bgm.volume = 0.3;
+
+bgm.play();
+
+</script>
 </body>
 </html>
