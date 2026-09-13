@@ -1325,7 +1325,10 @@ body {
 }
 
 .join-button {
-    padding: 15px 28px;
+
+    padding: 18px 35px;
+    font-size: 19px;
+    
 
     border: none;
     border-radius: 999px;
@@ -1335,8 +1338,9 @@ body {
 
     font-family: inherit;
     font-weight: bold;
-    font-size: 17px;
 
+    
+    
     cursor: pointer;
 
     box-shadow:
