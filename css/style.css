@@ -2853,7 +2853,20 @@ body.horror-glitch::after {
         box-shadow 0.2s ease;
 }
 
+.post-delete-button,
+.reply-button {
+    display: block;
+    margin-left: auto;
+}
 
+.reply-button {
+    margin-top: 10px;
+    margin-bottom: 6px;
+}
+
+.post-delete-button {
+    margin-bottom: 10px;
+}
 .post-delete-button:hover {
     transform: translateY(-2px);
 
@@ -3384,32 +3397,16 @@ button:disabled {
 /* =========================================
    削除ボタン
 ========================================= */
-
 .post-delete-button {
     display: block;
-
-    margin:
-        12px 0 0 auto;
-
+    margin: 0;
     padding: 5px 11px;
-
-    border:
-        1px solid
-        #cfe1e8;
-
+    border: 1px solid #cfe1e8;
     border-radius: 999px;
-
     background: white;
-
     color: #7295a3;
-
     font-size: 12px;
-
     cursor: pointer;
-
-    transition:
-        background 0.15s ease,
-        transform 0.15s ease;
 }
 
 .post-delete-button:hover {
@@ -3664,11 +3661,9 @@ button:disabled {
 
 .post-action-area {
     display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
     margin-top: 10px;
 }
 
@@ -3676,23 +3671,16 @@ button:disabled {
 /* =========================================
    返信ボタン
 ========================================= */
-
 .post-reply-button {
     padding: 5px 10px;
-
     border: 1px solid #cbdfe7;
-
     border-radius: 999px;
-
     background: white;
-
     color: #6f92a0;
-
     font-size: 12px;
-
     cursor: pointer;
+    margin: 0;
 }
-
 
 .post-reply-button:hover {
     background: #f1fbff;
@@ -3789,3 +3777,4 @@ button:disabled {
     }
 
 }
+
