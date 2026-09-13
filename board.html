@@ -474,7 +474,12 @@ import {
     doc
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
-
+import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-storage.js";
 /* =========================================
    Firebase
 ========================================= */
@@ -573,6 +578,7 @@ const postImage =
 
 const imagePreview =
     document.getElementById("image-preview");
+
 
 /* =========================================
    画像プレビュー
