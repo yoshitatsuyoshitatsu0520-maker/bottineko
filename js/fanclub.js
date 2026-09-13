@@ -21,6 +21,14 @@ import {
     serverTimestamp
 } from
 "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-storage.js";
 const firebaseConfig = {
     apiKey: "AIzaSyAIwaGRB6ffUB1t7emLsXqFpfYDQ5d7WjQ",
     authDomain: "teach-fanclub.firebaseapp.com",
@@ -31,8 +39,14 @@ const firebaseConfig = {
 };
 
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const app =
+    initializeApp(firebaseConfig);
+
+const db =
+    getFirestore(app);
+
+const storage =
+    getStorage(app);
 const boardButton =
     document.getElementById("boardButton");
 
