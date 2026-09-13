@@ -8,18 +8,17 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 
 import {
-
     getFirestore,
     collection,
     getDocs,
     addDoc,
+    updateDoc,
     deleteDoc,
     doc,
     query,
     orderBy,
     onSnapshot,
     serverTimestamp
-
 } from
 "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 const firebaseConfig = {
@@ -426,13 +425,24 @@ createMemberButton.addEventListener(
 /* =========================================
    会員証表示
 ========================================= */
-
-function displayMembers() {
+function displayMembers(list = members) {
 
     memberList.innerHTML = "";
 
-    members.forEach(member => {
+    if (list.length === 0) {
 
+        memberList.innerHTML =
+            '<p class="no-members">' +
+            '検索に一致する会員が見つからなかったよ' +
+            '</p>';
+
+        return;
+
+    }
+
+    list.forEach(member => {
+
+        // ↓ここから下は今までの処理
         const card = document.createElement("div");
 
         card.className = "member-card";
@@ -677,3 +687,160 @@ async function loadMyMember() {
 }
 loadMembers();
 
+/* =========================================
+   会員検索
+========================================= */
+
+const memberSearchButton =
+    document.getElementById("memberSearchButton");
+
+const memberSearchBox =
+    document.getElementById("memberSearchBox");
+
+const memberSearchInput =
+    document.getElementById("memberSearchInput");
+
+const memberSearchExecute =
+    document.getElementById("memberSearchExecute");
+
+const memberSearchClear =
+    document.getElementById("memberSearchClear");
+
+
+/*
+ * 検索欄を開く
+ */
+
+memberSearchButton.addEventListener(
+    "click",
+    () => {
+
+        if (
+            memberSearchBox.style.display ===
+            "none"
+        ) {
+
+            memberSearchBox.style.display =
+                "flex";
+
+            memberSearchInput.focus();
+
+        } else {
+
+            memberSearchBox.style.display =
+                "none";
+
+            memberSearchInput.value = "";
+
+            displayMembers();
+
+        }
+
+    }
+);
+
+
+/*
+ * 部分一致検索
+ */
+
+function searchMembers() {
+
+    const keyword =
+        memberSearchInput.value
+            .trim()
+            .toLowerCase();
+
+
+    /*
+     * 検索文字が空なら全員表示
+     */
+
+    if (!keyword) {
+
+        displayMembers();
+
+        return;
+
+    }
+
+
+    /*
+     * ニックネーム・推し・ひとこと
+     * のどれかに含まれていればヒット
+     */
+
+    const results =
+        members.filter(member => {
+
+            const name =
+                String(member.name || "")
+                    .toLowerCase();
+
+            const favorite =
+                String(member.favorite || "")
+                    .toLowerCase();
+
+            const message =
+                String(member.message || "")
+                    .toLowerCase();
+
+
+            return (
+                name.includes(keyword) ||
+                favorite.includes(keyword) ||
+                message.includes(keyword)
+            );
+
+        });
+
+
+    displayMembers(results);
+
+}
+
+
+/*
+ * 検索ボタン
+ */
+
+memberSearchExecute.addEventListener(
+    "click",
+    searchMembers
+);
+
+
+/*
+ * Enterキーでも検索
+ */
+
+memberSearchInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Enter") {
+
+            searchMembers();
+
+        }
+
+    }
+);
+
+
+/*
+ * クリア
+ */
+
+memberSearchClear.addEventListener(
+    "click",
+    () => {
+
+        memberSearchInput.value = "";
+
+        displayMembers();
+
+        memberSearchInput.focus();
+
+    }
+);

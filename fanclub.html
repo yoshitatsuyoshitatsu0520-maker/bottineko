@@ -23,7 +23,46 @@
     <div id="memberCount">
     現在の会員：0人
 </div>
+<div class="member-search-area">
 
+    <button
+        id="memberSearchButton"
+        type="button"
+        class="member-search-button"
+    >
+        🔍 会員を検索
+    </button>
+
+    <div
+        id="memberSearchBox"
+        class="member-search-box"
+        style="display: none;"
+    >
+
+        <input
+            id="memberSearchInput"
+            type="text"
+            maxlength="30"
+            placeholder="ニックネーム・推し・ひとこと"
+        >
+
+        <button
+            id="memberSearchExecute"
+            type="button"
+        >
+            検索
+        </button>
+
+        <button
+            id="memberSearchClear"
+            type="button"
+        >
+            クリア
+        </button>
+
+    </div>
+
+</div>
 <div class="background"></div>
 
 <main class="container character-page">
