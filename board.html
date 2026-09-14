@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>ねこティチファンクラブ掲示板｜ねこのティーチくんファンサイト</title>
+    <title>ねこティチファンクラブ掲示板｜ぼっちねこくんのふもふも広場</title>
 
     <link
         rel="stylesheet"
@@ -264,7 +264,7 @@
                     id="other-favorite"
                     type="text"
                     maxlength="30"
-                    placeholder="推しの名前を入力してね"
+                    placeholder="推しの名前を入力"
                 >
 
             </div>
@@ -302,14 +302,53 @@
         style="display:none;"
     >
 
-        <!-- 投稿一覧 -->
+     
+<section class="board-box">
 
-        <section class="board-box">
+    <div class="board-box-header">
+        🥝 総合掲示板（上にスクロールできます）
+    </div>
 
-            <div class="board-box-header">
-                🥝 総合掲示板（上にスクロールできます）
-            </div>
+    <!-- 投稿検索 -->
+    <div class="post-search">
 
+        <div class="post-search-title">
+            🔎 投稿を検索
+        </div>
+
+        <div class="post-search-row">
+
+            <input
+                type="text"
+                id="post-search-input"
+                placeholder="キーワードを入力"
+                autocomplete="off"
+            >
+
+            <button
+                type="button"
+                id="post-search-button"
+            >
+                検索
+            </button>
+
+            <button
+                type="button"
+                id="post-search-clear"
+            >
+                クリア
+            </button>
+
+        </div>
+
+        <div
+            id="post-search-result"
+            class="post-search-result"
+        ></div>
+
+    </div>
+
+    <div id="post-list">
             <div id="post-list">
 
                 <div class="board-loading">
@@ -565,7 +604,190 @@ const cancelReplyButton =
 
 const postFormTitle =
     document.getElementById("post-form-title");
+/* =========================================
+   投稿検索
+========================================= */
 
+const postSearchInput =
+    document.getElementById(
+        "post-search-input"
+    );
+
+const postSearchButton =
+    document.getElementById(
+        "post-search-button"
+    );
+
+const postSearchClear =
+    document.getElementById(
+        "post-search-clear"
+    );
+
+const postSearchResult =
+    document.getElementById(
+        "post-search-result"
+    );
+
+let currentPosts = [];
+
+
+/* =========================================
+   投稿を表示する
+========================================= */
+
+function renderPosts(
+    posts
+) {
+
+    postList.innerHTML = "";
+
+    if (posts.length === 0) {
+
+        postList.innerHTML = `
+            <div class="board-loading">
+                該当する投稿がありません…🥝
+            </div>
+        `;
+
+        return;
+    }
+
+    posts
+        .filter(
+            post =>
+                !post.parentId
+        )
+        .forEach(
+            post => {
+
+                renderPost(
+                    post,
+                    false
+                );
+
+                posts
+                    .filter(
+                        reply =>
+                            reply.parentId ===
+                            post.id
+                    )
+                    .forEach(
+                        reply => {
+
+                            renderPost(
+                                reply,
+                                true
+                            );
+
+                        }
+                    );
+
+            }
+        );
+}
+
+
+/* =========================================
+   検索
+========================================= */
+
+function searchPosts() {
+
+    const keyword =
+        postSearchInput.value
+            .trim()
+            .toLowerCase();
+
+    if (!keyword) {
+
+        renderPosts(
+            currentPosts
+        );
+
+        postSearchResult.textContent =
+            "";
+
+        return;
+    }
+
+
+    const results =
+        currentPosts.filter(
+            post =>
+                String(
+                    post.message || ""
+                )
+                .toLowerCase()
+                .includes(
+                    keyword
+                )
+        );
+
+
+    renderPosts(
+        results
+    );
+
+
+    postSearchResult.textContent =
+        `${results.length}件の投稿が見つかりました`;
+}
+
+
+/* =========================================
+   検索ボタン
+========================================= */
+
+postSearchButton.addEventListener(
+    "click",
+    () => {
+
+        searchPosts();
+
+    }
+);
+
+
+/* =========================================
+   Enterキーでも検索
+========================================= */
+
+postSearchInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            searchPosts();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   クリア
+========================================= */
+
+postSearchClear.addEventListener(
+    "click",
+    () => {
+
+        postSearchInput.value =
+            "";
+
+        postSearchResult.textContent =
+            "";
+
+        renderPosts(
+            currentPosts
+        );
+
+    }
+);
 
 /* =========================================
    会員ID
@@ -1275,43 +1497,11 @@ onSnapshot(
          * 通常投稿
          */
 
-        posts
-            .filter(
-                post =>
-                    !post.parentId
-            )
-            .forEach(
-                post => {
+        currentPosts = posts;
 
-                    renderPost(
-                        post,
-                        false
-                    );
-
-
-                    /*
-                     * この投稿への返信
-                     */
-
-                    posts
-                        .filter(
-                            reply =>
-                                reply.parentId ===
-                                post.id
-                        )
-                        .forEach(
-                            reply => {
-
-                                renderPost(
-                                    reply,
-                                    true
-                                );
-
-                            }
-                        );
-
-                }
-            );
+renderPosts(
+    currentPosts
+);
 
 
         /*

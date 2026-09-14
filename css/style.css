@@ -3316,7 +3316,6 @@ button:disabled {
 /* =========================================
    ★ 投稿1つ
 ========================================= */
-
 .post-card {
     padding: 18px 20px;
 
@@ -3325,9 +3324,7 @@ button:disabled {
 
     border: none;
 
-    border-bottom:
-        1px solid
-        #dcecf2;
+    border-bottom: none;
 
     border-radius: 0;
 
@@ -3336,9 +3333,44 @@ button:disabled {
     animation:
         postAppear 0.25s ease;
 }
+/* 返信が続く場合、通常投稿と返信の間の線を消す */
+/* =========================================
+   投稿の区切り線
+========================================= */
+/* =========================================
+   投稿の区切り線
+========================================= */
 
-.post-card:last-child {
+/* 投稿自身の下には線を出さない */
+.post-card {
     border-bottom: none;
+}
+
+/* 返信の直後に来る通常投稿の上に線を出す */
+.reply-card + .post-card:not(.reply-card) {
+    border-top: 1px solid #dcecf2;
+}
+
+/* 返信がない通常投稿には下線を出す */
+.post-card:not(.reply-card):not(:has(+ .reply-card)) {
+    border-bottom: 1px solid #dcecf2;
+}
+
+/* 一番最後が返信だった場合 */
+.reply-card:last-child {
+    border-bottom: 1px solid #dcecf2;
+}
+
+.reply-card {
+    margin-left: 35px;
+
+    padding-left: 20px;
+
+    border-left:
+        3px solid #d9edf4;
+
+    background:
+        rgba(239, 249, 252, 0.45);
 }
 
 @keyframes postAppear {
@@ -3865,3 +3897,126 @@ button:disabled {
     background: #f1fbff;
 }
 
+/* =========================================
+   投稿検索
+========================================= */
+/* =========================================
+   投稿検索
+========================================= */
+
+.post-search {
+    padding: 9px 14px;
+
+    background: rgba(247, 253, 255, 0.7);
+
+    border-bottom: 1px solid #e3f0f4;
+}
+
+.post-search-title {
+    margin-bottom: 5px;
+
+    color: #7d99a4;
+
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.post-search-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+#post-search-input {
+    flex: 1;
+    min-width: 0;
+
+    padding: 6px 9px;
+
+    border: 1px solid #d5e5eb;
+    border-radius: 9px;
+
+    outline: none;
+
+    background: white;
+
+    color: #58727e;
+    font-size: 12px;
+}
+
+#post-search-input:focus {
+    border-color: #a8d6e5;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(145, 207, 226, 0.12);
+}
+
+#post-search-input::placeholder {
+    color: #b7c7ce;
+}
+
+#post-search-button,
+#post-search-clear {
+    padding: 6px 10px;
+
+    border: 1px solid #d5e5eb;
+    border-radius: 9px;
+
+    background: white;
+
+    color: #718d98;
+
+    font-size: 11px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.1s ease;
+}
+
+#post-search-button:hover,
+#post-search-clear:hover {
+    background: #f3fbfd;
+}
+
+#post-search-button:active,
+#post-search-clear:active {
+    transform: scale(0.97);
+}
+
+.post-search-result {
+    min-height: 14px;
+
+    margin-top: 4px;
+
+    color: #9aadb5;
+
+    font-size: 11px;
+}
+
+
+/* スマホ */
+
+@media (max-width: 600px) {
+
+    .post-search {
+        padding: 8px 12px;
+    }
+
+    .post-search-row {
+        flex-wrap: nowrap;
+    }
+
+    #post-search-input {
+        width: auto;
+        flex-basis: auto;
+    }
+
+    #post-search-button,
+    #post-search-clear {
+        flex: 0 0 auto;
+    }
+
+}
