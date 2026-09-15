@@ -2088,7 +2088,11 @@ body.gravity-active {
     margin-left: 900px;
     margin-top: 200px;
 }
-
+.t-image {
+    width: 150px;
+    margin-left: 400px;
+    margin-top: 400px;
+}
 /* =========================================
    f-image ホラー・バグ演出
 ========================================= */
