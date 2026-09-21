@@ -243,7 +243,164 @@ bgmButton.addEventListener("click", () => {
     }
 
 });
+// =========================================
+// 隠しコメントシステム
+// =========================================
 
+const secretComment = document.getElementById("secretComment");
+const secretPopup = document.getElementById("secretPopup");
+const secretClose = document.getElementById("secretClose");
+
+
+// ランダムで出現するコメント
+const secretComments = [
+    "お前さては……暇だな？",
+    "空いてるとこ５回クリックしてみｗ",
+    "このサイトは俺っちが乗っ取ってやるよｗ",
+    "バーカｗｗｗ",
+    "ｗｗｗｗｗ"
+];
+
+
+// コメントを出す
+function showSecretComment() {
+
+    // ランダムな文章を選ぶ
+    const randomIndex =
+        Math.floor(Math.random() * secretComments.length);
+
+    secretComment.textContent =
+        secretComments[randomIndex];
+
+    // アニメーションをリセット
+    secretComment.classList.remove("show");
+
+    // 強制的に再描画
+    void secretComment.offsetWidth;
+
+    // 表示
+    secretComment.classList.add("show");
+}
+
+// =========================================
+// 5回クリックで合言葉入力画面
+// =========================================
+
+let secretClickCount = 0;
+
+// 合言葉
+const SECRET_PASSWORD = "ねこはねこでもふもふものねこ";
+
+// 要素取得
+const passwordPopup =
+    document.getElementById("passwordPopup");
+
+const passwordInput =
+    document.getElementById("passwordInput");
+
+const passwordButton =
+    document.getElementById("passwordButton");
+
+const passwordClose =
+    document.getElementById("passwordClose");
+
+const passwordResult =
+    document.getElementById("passwordResult");
+
+
+// トップページをクリックした回数を数える
+document.addEventListener("click", (event) => {
+
+    // 合言葉画面や隠しコメントをクリックした場合は数えない
+    if (
+        event.target.closest("#passwordPopup") ||
+        event.target.closest("#secretComment")
+    ) {
+        return;
+    }
+
+    secretClickCount++;
+
+    console.log(
+        "秘密のクリック：" + secretClickCount
+    );
+
+
+    // 5回クリック！
+    if (secretClickCount >= 5) {
+
+        passwordPopup.style.display = "flex";
+
+        // カウントをリセット
+        secretClickCount = 0;
+
+        // 入力欄にフォーカス
+        setTimeout(() => {
+            passwordInput.focus();
+        }, 100);
+    }
+});
+
+
+// 合言葉チェック
+passwordButton.addEventListener("click", () => {
+
+    const input =
+        passwordInput.value.trim();
+
+
+    if (input === SECRET_PASSWORD) {
+
+        passwordResult.textContent =
+            "正解！！";
+
+        passwordResult.style.color =
+            "#00ff66";
+
+
+        // ここに隠しページなどの処理を追加できる！
+        console.log("正解！");
+
+    } else {
+
+        passwordResult.textContent =
+            "違うゾｗ";
+
+        passwordResult.style.color =
+            "#ff5555";
+    }
+});
+
+
+// 閉じる
+passwordClose.addEventListener("click", () => {
+
+    passwordPopup.style.display = "none";
+
+    passwordInput.value = "";
+    passwordResult.textContent = "";
+});
+// 20秒ごとに出現
+setInterval(() => {
+    showSecretComment();
+}, 20000);
+
+
+// コメントをクリック
+secretComment.addEventListener("click", () => {
+
+    // アニメーションを止める
+    secretComment.classList.remove("show");
+
+    // ポップアップ表示
+    secretPopup.style.display = "flex";
+});
+
+
+// 閉じる
+secretClose.addEventListener("click", () => {
+    secretPopup.style.display = "none";
+});
 /* =========================================
    🥝 カーソルについてくるキウイ
 ========================================= */

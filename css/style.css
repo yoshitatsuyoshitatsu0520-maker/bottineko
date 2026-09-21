@@ -4024,3 +4024,184 @@ button:disabled {
     }
 
 }
+
+/* =================================
+   隠しコメント
+================================= */
+
+#secretComment {
+    position: fixed;
+    top: 30%;
+    left: 100%;
+    z-index: 9999;
+
+    color: #00ff66;
+    font-size: 24px;
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    text-shadow:
+        2px 2px 0 #003300,
+        -1px -1px 0 #003300;
+
+    cursor: pointer;
+
+    pointer-events: none;
+}
+
+/* コメントが流れているとき */
+#secretComment.show {
+    animation: secretScroll 8s linear forwards;
+    pointer-events: auto;
+}
+
+@keyframes secretScroll {
+    from {
+        left: 100%;
+    }
+
+    to {
+        left: -100%;
+    }
+}
+
+
+/* =================================
+   合言葉ポップアップ
+================================= */
+
+#secretPopup {
+    position: fixed;
+    inset: 0;
+
+    z-index: 10000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.65);
+}
+
+.secretPopupBox {
+    background: #111;
+    border: 3px solid #00ff66;
+
+    padding: 30px 40px;
+
+    text-align: center;
+
+    color: white;
+
+    box-shadow:
+        0 0 20px #00ff66;
+
+    border-radius: 10px;
+}
+
+#secretMessage {
+    font-size: 22px;
+    line-height: 1.8;
+}
+
+#secretClose {
+    margin-top: 15px;
+
+    padding: 8px 20px;
+
+    background: #00ff66;
+    color: #111;
+
+    border: none;
+    border-radius: 5px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+/* =================================
+   合言葉入力画面
+================================= */
+
+#passwordPopup {
+    position: fixed;
+    inset: 0;
+
+    z-index: 11000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.passwordBox {
+    width: min(90%, 450px);
+
+    padding: 30px;
+
+    background: #111;
+
+    border: 3px solid #00ff66;
+    border-radius: 12px;
+
+    text-align: center;
+
+    color: white;
+
+    box-shadow: 0 0 25px #00ff66;
+}
+
+.passwordBox h2 {
+    margin-top: 0;
+}
+
+#passwordInput {
+    width: 80%;
+
+    padding: 12px;
+
+    margin: 10px 0;
+
+    font-size: 16px;
+
+    border: 2px solid #00ff66;
+    border-radius: 6px;
+
+    box-sizing: border-box;
+}
+
+#passwordButton,
+#passwordClose {
+    padding: 10px 20px;
+
+    margin: 5px;
+
+    border: none;
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+}
+
+#passwordButton {
+    background: #00ff66;
+    color: #111;
+}
+
+#passwordClose {
+    background: #555;
+    color: white;
+}
+
+#passwordResult {
+    min-height: 24px;
+
+    font-weight: bold;
+}

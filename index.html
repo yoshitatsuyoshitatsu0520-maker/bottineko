@@ -339,7 +339,48 @@
 
 
 <img id="cursorKiwi" src="images/kiwi.png" alt="">
+<!-- 隠しコメント -->
+<div id="secretComment"></div>
 
+<!-- 合言葉ポップアップ -->
+<div id="secretPopup">
+    <div class="secretPopupBox">
+        <p id="secretMessage">
+            よく見つけたなｗ<br>
+            合言葉を教えてやるよ、<br>
+            『ねこはねこでもふもふものねこ』だ！<br>
+            覚えときな
+        </p>
+
+        <button id="secretClose">閉じる</button>
+    </div>
+</div>
+<!-- 合言葉入力画面 -->
+<div id="passwordPopup">
+    <div class="passwordBox">
+
+        <h2>秘密の合言葉</h2>
+
+        <p>合言葉を言え</p>
+
+        <input
+            type="text"
+            id="passwordInput"
+            placeholder="ここに入力"
+        >
+
+        <button id="passwordButton">
+            確認
+        </button>
+
+        <p id="passwordResult"></p>
+
+        <button id="passwordClose">
+            閉じる
+        </button>
+
+    </div>
+</div>
 <script>
 /* =========================================
    サイト名クリック：無重力モード
