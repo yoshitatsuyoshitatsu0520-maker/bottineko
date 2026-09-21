@@ -351,17 +351,14 @@ passwordButton.addEventListener("click", () => {
 
     if (input === SECRET_PASSWORD) {
 
-        passwordResult.textContent =
-            "正解！！";
+    passwordResult.textContent = "正解！！";
+    passwordResult.style.color = "#00ff66";
 
-        passwordResult.style.color =
-            "#00ff66";
+    setTimeout(() => {
+        window.location.href = "secret.html";
+    }, 800);
 
-
-        // ここに隠しページなどの処理を追加できる！
-        console.log("正解！");
-
-    } else {
+} else {
 
         passwordResult.textContent =
             "違うゾｗ";
